@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'list_courses2.dart';
+import 'SecondScreen.dart';
 
-class LoginStudent extends StatefulWidget {
-  const LoginStudent({super.key});
+class LoginAdmin extends StatefulWidget {
+  const LoginAdmin({super.key});
 
   @override
-  State<LoginStudent> createState() => _LoginStudentState();
+  State<LoginAdmin> createState() => _LoginAdminState();
 }
 
-class _LoginStudentState extends State<LoginStudent> {
+class _LoginAdminState extends State<LoginAdmin> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -108,7 +108,7 @@ class _LoginStudentState extends State<LoginStudent> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ListCourses2()));
+                                    builder: (context) => SecondScreen()));
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -119,7 +119,7 @@ class _LoginStudentState extends State<LoginStudent> {
                               child: Padding(
                                 padding: EdgeInsets.all(10.0),
                                 child: Text(
-                                  'Login Student',
+                                  'Login Admin',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 30,
@@ -156,7 +156,7 @@ class _LoginStudentState extends State<LoginStudent> {
                             ),
                             const Center(
                               child: Text(
-                                'Login Teacher',
+                                'Login Student',
                                 style: TextStyle(
                                   color: Colors.pink,
                                   fontSize: 20,
@@ -178,4 +178,3 @@ class _LoginStudentState extends State<LoginStudent> {
     );
   }
 }
-

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'SecondScreen.dart';
+import 'list_courses.dart';
 
 class LoginTeacher extends StatefulWidget {
   const LoginTeacher({super.key});
@@ -108,7 +109,7 @@ class _LoginTeacherState extends State<LoginTeacher> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SecondScreen()));
+                                    builder: (context) => ListCourses()));
                           },
                           child: Container(
                             decoration: BoxDecoration(
