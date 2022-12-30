@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'SecondScreen.dart';
 
 class EnterOTP extends StatefulWidget {
@@ -23,6 +23,7 @@ class _EnterOTPState extends State<EnterOTP> {
       body: Center(
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 35),
@@ -31,21 +32,166 @@ class _EnterOTPState extends State<EnterOTP> {
                   borderRadius: BorderRadius.circular(12),
                   color: Colors.white.withOpacity(0.8),
                 ),
-                child: Padding(
-                  padding: EdgeInsets.all(25.0),
-                  child: TextField(
-                    style: TextStyle(color: Colors.black),
-                    decoration: const InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.pink, width: 5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextField(
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(1),
+                          ],
+                          style: TextStyle(fontSize: 75),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black54, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black12, width: 2.0),
+                            ),
+                          ),
+                        ),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.pinkAccent, width: 5.0),
-                      ),
-                      hintText: 'Enter OTP',
                     ),
-                  ),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextField(
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(1),
+                          ],
+                          style: TextStyle(fontSize: 75),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black54, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black12, width: 2.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextField(
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(1),
+                          ],
+                          style: TextStyle(fontSize: 75),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.black54, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.black12, width: 2.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextField(
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(1),
+                          ],
+                          style: TextStyle(fontSize: 75),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.black54, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.black12, width: 2.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextField(
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(1),
+                          ],
+                          style: TextStyle(fontSize: 75),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.black54, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.black12, width: 2.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: TextField(
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(1),
+                          ],
+                          style: TextStyle(fontSize: 75),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.black54, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.black12, width: 2.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 35),

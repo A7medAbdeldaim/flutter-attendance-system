@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'SecondScreen.dart';
 
-const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+const _chars = '1234567890';
 Random _rnd = Random();
 
 String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
@@ -26,17 +26,21 @@ class _GenerateOTPState extends State<GenerateOTP> {
 
   @override
   void initState() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        x--;
-        btnText1 = 'Available until $x';
-        if (x < 0) {
-          otp = '';
-          btnText1 = 'Generate';
-          shouldAbsorb = false;
-        }
+
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        setState(() {
+          if (shouldAbsorb == true) {
+            x--;
+            btnText1 = 'Available until $x';
+            if (x < 0) {
+              otp = '';
+              btnText1 = 'Generate';
+              shouldAbsorb = false;
+            }
+          }
+        });
       });
-    });
+
     super.initState();
   }
 
@@ -59,6 +63,7 @@ class _GenerateOTPState extends State<GenerateOTP> {
       body: Center(
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 65),
@@ -71,8 +76,9 @@ class _GenerateOTPState extends State<GenerateOTP> {
                   otp,
                   style: TextStyle(
                       color: Colors.black,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w500),
+                      fontSize: 75,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 10),
                 ),
               ),
               const SizedBox(height: 35),
