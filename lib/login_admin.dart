@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'SecondScreen.dart';
+import 'admin_dashboard.dart';
 
 class LoginAdmin extends StatefulWidget {
   const LoginAdmin({super.key});
@@ -108,7 +109,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SecondScreen()));
+                                    builder: (context) => AdminDashboard()));
                           },
                           child: Container(
                             decoration: BoxDecoration(

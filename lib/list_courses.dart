@@ -34,15 +34,6 @@ class _ListCoursesState extends State<ListCourses> {
               );
             }, // Handle your onTap here.
           );
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                "Course " + position.toString(),
-                style: TextStyle(fontSize: 22.0),
-              ),
-            ),
-          );
         },
       ),
     );
