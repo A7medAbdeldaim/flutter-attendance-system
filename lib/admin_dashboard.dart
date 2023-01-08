@@ -9,7 +9,28 @@ class AdminDashboard extends StatefulWidget {
   State<AdminDashboard> createState() => _AdminDashboardState();
 }
 
-class _AdminDashboardState extends State<AdminDashboard> {
+class _AdminDashboardState extends State<AdminDashboard>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
+    _tabController.addListener(_handleTabIndex);
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleTabIndex);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _handleTabIndex() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,8 +42,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
             appBar: AppBar(
               title: const Text('Admin Dashboard'),
               backgroundColor: Colors.pink,
-              bottom: const TabBar(
-                tabs: <Widget>[
+              bottom: TabBar(
+                controller: _tabController,
+                tabs: const <Widget>[
                   Tab(
                     icon: Text("Teachers"),
                   ),
@@ -36,6 +58,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
             ),
             body: TabBarView(
+              controller: _tabController,
               children: <Widget>[
                 ListView.builder(
                   itemCount: 5,
@@ -45,7 +68,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SecondScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => const SecondScreen()),
                         );
                       }, // Handle your onTap here.
                     );
@@ -59,7 +83,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SecondScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => const SecondScreen()),
                         );
                       }, // Handle your onTap here.
                     );
@@ -73,7 +98,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SecondScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => const SecondScreen()),
                         );
                       }, // Handle your onTap here.
                     );
@@ -81,9 +107,41 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ),
               ],
             ),
+            floatingActionButton: _bottomButtons(),
           ),
         ),
       ),
     );
+  }
+
+  Widget _bottomButtons() {
+    int ind = _tabController.index;
+
+    if (ind == 0) {
+      return FloatingActionButton.extended(
+        onPressed: () {},
+        tooltip: 'Add a new Teacher',
+          label: const Text('Add a new Teacher'),
+        backgroundColor: Colors.pink,
+        icon: const Icon(Icons.add),
+      );
+    } else if (ind == 1) {
+      return FloatingActionButton.extended(
+        onPressed: () {},
+        tooltip: 'Add a new Student',
+          label: const Text('Add a new Student'),
+        backgroundColor: Colors.pink,
+        icon: const Icon(Icons.add),
+      );
+    } else if (ind == 2) {
+      return FloatingActionButton.extended(
+        onPressed: () {},
+        label: const Text('Add a new Course'),
+        tooltip: 'Add a new Course',
+        backgroundColor: Colors.pink,
+        icon: const Icon(Icons.add),
+      );
+    }
+    return FloatingActionButton(onPressed: (){});
   }
 }
