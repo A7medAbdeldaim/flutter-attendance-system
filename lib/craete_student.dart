@@ -9,26 +9,26 @@ import 'package:firebase_core/firebase_core.dart';
 
 
 
-class CreateTeacher extends StatefulWidget {
-  const CreateTeacher({super.key});
+class CreateStudent extends StatefulWidget {
+  const CreateStudent({super.key});
 
   @override
-  State<CreateTeacher> createState() => _CreateTeacherState();
+  State<CreateStudent> createState() => _CreateStudentState();
 }
 
 void insertData(data) {
   final db = FirebaseFirestore.instance;
-  db.collection("teachers").add(data).then((DocumentReference doc) {
+  db.collection("students").add(data).then((DocumentReference doc) {
     print('DocumentSnapshot added with ID: ${doc.id}');
   });
 }
 
-class _CreateTeacherState extends State<CreateTeacher> {
+class _CreateStudentState extends State<CreateStudent> {
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Create a new teacher',
+      title: 'Create a new student',
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         FormBuilderLocalizations.delegate,
@@ -67,7 +67,7 @@ class _CompleteFormState extends State<CompleteForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create a new teacher'),
+        title: const Text('Create a new student'),
         backgroundColor: Colors.pink,
       ),
       body: Padding(
@@ -165,9 +165,9 @@ class _CompleteFormState extends State<CompleteForm> {
                     ),
                     FormBuilderTextField(
                       autovalidateMode: AutovalidateMode.always,
-                      obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
+                      obscureText: true,
                       name: 'password',
                       decoration: InputDecoration(
                         labelText: 'Password',

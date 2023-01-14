@@ -1,15 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:untitled/admin_dashboard.dart';
+import 'package:untitled/craete_teacher.dart';
+import 'firebase_options.dart';
 import 'login_admin.dart';
 import 'login_student.dart';
 import 'login_teacher.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
   // runApp(
   //   const MaterialApp(
   //     debugShowCheckedModeBanner: false,
   //     title: "Login Student ",
-  //     home: LoginStudent(),
+  //     home: AdminDashboard(),
   //   ),
   // );
 }
@@ -80,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height / 2.5,
+              height: MediaQuery.of(context).size.height / 1.9,
               child: Center(
                 child: const Text(
                   'Attendance System',

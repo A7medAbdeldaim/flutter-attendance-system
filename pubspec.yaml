@@ -40,6 +40,9 @@ dependencies:
   localization: ^2.1.0
   flutter_localization: ^0.1.9
   form_builder_validators: ^8.4.0
+  firebase_core: ^2.4.1
+  firebase_database: ^10.0.9
+  cloud_firestore: ^4.3.1
 
 dev_dependencies:
   flutter_test:

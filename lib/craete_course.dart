@@ -7,28 +7,27 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'MultiSelect.dart';
 
-
-class CreateTeacher extends StatefulWidget {
-  const CreateTeacher({super.key});
+class CreateCourse extends StatefulWidget {
+  const CreateCourse({super.key});
 
   @override
-  State<CreateTeacher> createState() => _CreateTeacherState();
+  State<CreateCourse> createState() => _CreateCourseState();
 }
 
 void insertData(data) {
   final db = FirebaseFirestore.instance;
-  db.collection("teachers").add(data).then((DocumentReference doc) {
+  db.collection("courses").add(data).then((DocumentReference doc) {
     print('DocumentSnapshot added with ID: ${doc.id}');
   });
 }
 
-class _CreateTeacherState extends State<CreateTeacher> {
-
+class _CreateCourseState extends State<CreateCourse> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Create a new teacher',
+      title: 'Create a new course',
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         FormBuilderLocalizations.delegate,
@@ -60,14 +59,70 @@ class _CompleteFormState extends State<CompleteForm> {
   bool _emailHasError = true;
   bool _passwordHasError = true;
 
-
   void _onChanged(dynamic val) => debugPrint(val.toString());
+
+  List<String> _selectedItemsTeacher = [];
+  List<String> _selectedItemsStudent = [];
+
+  void _showMultiSelectStudents() async {
+    final db = FirebaseFirestore.instance;
+    // a list of selectable items
+    // these items can be hard-coded or dynamically fetched from a database/API
+    List<String> studentsArr = [];
+
+    await db.collection("students").get().then((value) {
+      for (var item in value.docs) {
+        studentsArr.add(item.get("name"));
+      }
+    });
+
+    List<String>? results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelect(items: studentsArr);
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      setState(() {
+        _selectedItemsStudent = results;
+      });
+    }
+  }
+
+  void _showMultiSelectTeachers() async {
+    final db = FirebaseFirestore.instance;
+    // a list of selectable items
+    // these items can be hard-coded or dynamically fetched from a database/API
+    List<String> teachersArr = [];
+
+    await db.collection("teachers").get().then((value) {
+      for (var item in value.docs) {
+        teachersArr.add(item.get("name"));
+      }
+    });
+
+    List<String>? results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelect(items: teachersArr);
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      setState(() {
+        _selectedItemsTeacher = results;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create a new teacher'),
+        title: const Text('Create a new course'),
         backgroundColor: Colors.pink,
       ),
       body: Padding(
@@ -88,35 +143,9 @@ class _CompleteFormState extends State<CompleteForm> {
                     const SizedBox(height: 15),
                     FormBuilderTextField(
                       autovalidateMode: AutovalidateMode.always,
-                      name: 'id',
-                      decoration: InputDecoration(
-                        labelText: 'KKU ID',
-                        // labelStyle: const TextStyle(color: Colors.pink),
-                        suffixIcon: _idHasError
-                            ? const Icon(Icons.error, color: Colors.red)
-                            : const Icon(Icons.check, color: Colors.green),
-                      ),
-                      onChanged: (val) {
-                        setState(() {
-                          _idHasError = !(_formKey.currentState?.fields['id']
-                              ?.validate() ??
-                              false);
-                        });
-                      },
-                      // valueTransformer: (text) => num.tryParse(text),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.numeric(),
-                      ]),
-                      // initialValue: '0000000',
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                    ),
-                    FormBuilderTextField(
-                      autovalidateMode: AutovalidateMode.always,
                       name: 'name',
                       decoration: InputDecoration(
-                        labelText: 'Full Name',
+                        labelText: 'Course Name',
                         // labelStyle: const TextStyle(color: Colors.pink),
                         suffixIcon: _nameHasError
                             ? const Icon(Icons.error, color: Colors.red)
@@ -124,62 +153,9 @@ class _CompleteFormState extends State<CompleteForm> {
                       ),
                       onChanged: (val) {
                         setState(() {
-                          _nameHasError = !(_formKey.currentState?.fields['name']
-                              ?.validate() ??
-                              false);
-                        });
-                      },
-                      // valueTransformer: (text) => num.tryParse(text),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                      // initialValue: '0000000',
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                    ),
-                    FormBuilderTextField(
-                      autovalidateMode: AutovalidateMode.always,
-                      name: 'email',
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        // labelStyle: const TextStyle(color: Colors.pink),
-                        suffixIcon: _emailHasError
-                            ? const Icon(Icons.error, color: Colors.red)
-                            : const Icon(Icons.check, color: Colors.green),
-                      ),
-                      onChanged: (val) {
-                        setState(() {
-                          _emailHasError = !(_formKey.currentState?.fields['email']
-                              ?.validate() ??
-                              false);
-                        });
-                      },
-                      // valueTransformer: (text) => num.tryParse(text),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.email(),
-                      ]),
-                      // initialValue: '0000000',
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                    ),
-                    FormBuilderTextField(
-                      autovalidateMode: AutovalidateMode.always,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      name: 'password',
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        // labelStyle: const TextStyle(color: Colors.pink),
-                        suffixIcon: _passwordHasError
-                            ? const Icon(Icons.error, color: Colors.red)
-                            : const Icon(Icons.check, color: Colors.green),
-                      ),
-                      onChanged: (val) {
-                        setState(() {
-                          _passwordHasError = !(_formKey.currentState?.fields['password']
-                              ?.validate() ??
+                          _nameHasError = !(_formKey
+                                  .currentState?.fields['name']
+                                  ?.validate() ??
                               false);
                         });
                       },
@@ -192,9 +168,43 @@ class _CompleteFormState extends State<CompleteForm> {
                       textInputAction: TextInputAction.next,
                     ),
                     const SizedBox(height: 25),
+
+                    ElevatedButton(
+                      onPressed: _showMultiSelectTeachers,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pink,
+                      ),
+                      child: const Text('Add Teachers'),
+                    ),
+                    // display selected items
+                    Wrap(
+                      children: _selectedItemsTeacher
+                          .map((e) => Chip(
+                                label: Text(e),
+                              ))
+                          .toList(),
+                    ),
+                    const SizedBox(height: 15),
+
+                    ElevatedButton(
+                      onPressed: _showMultiSelectStudents,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pink,
+                      ),
+                      child: const Text('Add Students'),
+                    ),
+                    // display selected items
+                    Wrap(
+                      children: _selectedItemsStudent
+                          .map((e) => Chip(
+                        label: Text(e),
+                      ))
+                          .toList(),
+                    ),
                   ],
                 ),
               ),
+              const SizedBox(height: 15),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -203,13 +213,14 @@ class _CompleteFormState extends State<CompleteForm> {
                         if (_formKey.currentState?.saveAndValidate() ?? false) {
                           debugPrint(_formKey.currentState?.value.toString());
                           insertData(_formKey.currentState?.value);
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
                             content: Text("Added Successfully"),
                           ));
                           _formKey.currentState?.reset();
-
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
                             content: Text("Validation Failed"),
                           ));
                         }
@@ -234,12 +245,8 @@ class _CompleteFormState extends State<CompleteForm> {
                         padding: const EdgeInsets.all(20.0),
                       ),
                       // color: Theme.of(context).colorScheme.secondary,
-                      child: Text(
-                        'Reset',
-                        style: TextStyle(
-                            color: Colors.black
-                        )
-                      ),
+                      child:
+                          Text('Reset', style: TextStyle(color: Colors.black)),
                     ),
                   ),
                 ],

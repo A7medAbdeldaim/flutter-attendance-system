@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:untitled/craete_course.dart';
+import 'package:untitled/craete_student.dart';
+import 'package:untitled/craete_teacher.dart';
 import 'SecondScreen.dart';
+import 'login_teacher.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -60,51 +65,108 @@ class _AdminDashboardState extends State<AdminDashboard>
             body: TabBarView(
               controller: _tabController,
               children: <Widget>[
-                ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, position) {
-                    return ListTile(
-                      title: Text('Teacher $position'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SecondScreen()),
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("teachers")
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Transform.scale(
+                          scale: 0.25,
+                          child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),),
                         );
-                      }, // Handle your onTap here.
-                    );
-                  },
-                ),
-                ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, position) {
-                    return ListTile(
-                      title: Text('Student $position'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SecondScreen()),
+                      }
+                      final userSnapshot = snapshot.data?.docs;
+                      if (userSnapshot!.isEmpty) {
+                        return const Text("No Data");
+                      }
+                      return ListView.builder(
+                          itemCount: userSnapshot.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.pink,
+                                child: Text(userSnapshot[index]["name"][0]),
+                              ),
+                              title: Text(userSnapshot[index]["name"]),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const SecondScreen()),
+                                );
+                              }, //
+                            );
+                          });
+                    }),
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("students")
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Transform.scale(
+                          scale: 0.25,
+                          child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),),
                         );
-                      }, // Handle your onTap here.
-                    );
-                  },
-                ),
-                ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, position) {
-                    return ListTile(
-                      title: Text('Course $position'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SecondScreen()),
+                      }
+                      final userSnapshot = snapshot.data?.docs;
+                      if (userSnapshot!.isEmpty) {
+                        return const Text("No Data");
+                      }
+                      return ListView.builder(
+                          itemCount: userSnapshot.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.pink,
+                                child: Text(userSnapshot[index]["name"][0]),
+                              ),
+                              title: Text(userSnapshot[index]["name"]),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const SecondScreen()),
+                                );
+                              }, //
+                            );
+                          });
+                    }),
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("courses")
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Transform.scale(
+                          scale: 0.25,
+                          child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),),
                         );
-                      }, // Handle your onTap here.
-                    );
-                  },
-                ),
+                      }
+                      final userSnapshot = snapshot.data?.docs;
+                      if (userSnapshot!.isEmpty) {
+                        return const Text("No Data");
+                      }
+                      return ListView.builder(
+                          itemCount: userSnapshot.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.pink,
+                                child: Text(userSnapshot[index]["name"][0]),
+                              ),
+                              title: Text(userSnapshot[index]["name"]),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const SecondScreen()),
+                                );
+                              }, //
+                            );
+                          });
+                    }),
               ],
             ),
             floatingActionButton: _bottomButtons(),
@@ -119,29 +181,38 @@ class _AdminDashboardState extends State<AdminDashboard>
 
     if (ind == 0) {
       return FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const CreateTeacher()));
+        },
         tooltip: 'Add a new Teacher',
-          label: const Text('Add a new Teacher'),
+        label: const Text('Add a new Teacher'),
         backgroundColor: Colors.pink,
         icon: const Icon(Icons.add),
       );
     } else if (ind == 1) {
       return FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const CreateStudent()));
+        },
         tooltip: 'Add a new Student',
-          label: const Text('Add a new Student'),
+        label: const Text('Add a new Student'),
         backgroundColor: Colors.pink,
         icon: const Icon(Icons.add),
       );
     } else if (ind == 2) {
       return FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const CreateCourse()));
+        },
         label: const Text('Add a new Course'),
         tooltip: 'Add a new Course',
         backgroundColor: Colors.pink,
         icon: const Icon(Icons.add),
       );
     }
-    return FloatingActionButton(onPressed: (){});
+    return FloatingActionButton(onPressed: () {});
   }
 }
