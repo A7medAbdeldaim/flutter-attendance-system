@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:untitled/craete_course.dart';
-import 'package:untitled/craete_student.dart';
-import 'package:untitled/craete_teacher.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:untitled/create_course.dart';
+import 'package:untitled/create_student.dart';
+import 'package:untitled/create_teacher.dart';
+import 'package:untitled/edit_course.dart';
+import 'package:untitled/edit_student.dart';
+import 'package:untitled/edit_teacher.dart';
+import 'package:untitled/list_lectures.dart';
 import 'SecondScreen.dart';
 import 'login_teacher.dart';
 
@@ -83,19 +88,53 @@ class _AdminDashboardState extends State<AdminDashboard>
                       return ListView.builder(
                           itemCount: userSnapshot.length,
                           itemBuilder: (context, index) {
-                            return ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.pink,
-                                child: Text(userSnapshot[index]["name"][0]),
+                            return Slidable(
+                              // Specify a key if the Slidable is dismissible.
+                              key: const ValueKey(0),
+                              endActionPane: ActionPane(
+                                motion: ScrollMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (BuildContext context) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditTeacher(teacherID: userSnapshot[index].id)));
+                                    },
+                                    backgroundColor: Colors.green,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.edit,
+                                    label: 'Edit',
+                                  ),
+                                  SlidableAction(
+                                    onPressed: (BuildContext context) {
+                                      remove('teachers', userSnapshot[index].id);
+                                    },
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: 'Remove',
+                                  ),
+                                ],
                               ),
-                              title: Text(userSnapshot[index]["name"]),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const SecondScreen()),
-                                );
-                              }, //
+
+                              // The child of the Slidable is what the user sees when the
+                              // component is not dragged.
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.pink,
+                                  child: Text(userSnapshot[index]["name"][0]),
+                                ),
+                                title: Text(userSnapshot[index]["name"]),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ListLectures(courseID:userSnapshot[index].id)),
+                                  );
+                                }, //
+                              ),
                             );
                           });
                     }),
@@ -117,19 +156,53 @@ class _AdminDashboardState extends State<AdminDashboard>
                       return ListView.builder(
                           itemCount: userSnapshot.length,
                           itemBuilder: (context, index) {
-                            return ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.pink,
-                                child: Text(userSnapshot[index]["name"][0]),
+                            return Slidable(
+                              // Specify a key if the Slidable is dismissible.
+                              key: const ValueKey(0),
+                              endActionPane: ActionPane(
+                                motion: ScrollMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (BuildContext context) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditStudent(studentID: userSnapshot[index].id)));
+                                    },
+                                    backgroundColor: Colors.green,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.edit,
+                                    label: 'Edit',
+                                  ),
+                                  SlidableAction(
+                                    onPressed: (BuildContext context) {
+                                      remove('students', userSnapshot[index].id);
+                                    },
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: 'Remove',
+                                  ),
+                                ],
                               ),
-                              title: Text(userSnapshot[index]["name"]),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const SecondScreen()),
-                                );
-                              }, //
+
+                              // The child of the Slidable is what the user sees when the
+                              // component is not dragged.
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.pink,
+                                  child: Text(userSnapshot[index]["name"][0]),
+                                ),
+                                title: Text(userSnapshot[index]["name"]),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ListLectures(courseID:userSnapshot[index].id)),
+                                  );
+                                }, //
+                              ),
                             );
                           });
                     }),
@@ -151,19 +224,53 @@ class _AdminDashboardState extends State<AdminDashboard>
                       return ListView.builder(
                           itemCount: userSnapshot.length,
                           itemBuilder: (context, index) {
-                            return ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.pink,
-                                child: Text(userSnapshot[index]["name"][0]),
+                            return Slidable(
+                              // Specify a key if the Slidable is dismissible.
+                              key: const ValueKey(0),
+                              endActionPane: ActionPane(
+                                motion: ScrollMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (BuildContext context) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditCourse(courseID: userSnapshot[index].id)));
+                                    },
+                                    backgroundColor: Colors.green,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.edit,
+                                    label: 'Edit',
+                                  ),
+                                  SlidableAction(
+                                    onPressed: (BuildContext context) {
+                                      remove('courses', userSnapshot[index].id);
+                                    },
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: 'Remove',
+                                  ),
+                                ],
                               ),
-                              title: Text(userSnapshot[index]["name"]),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const SecondScreen()),
-                                );
-                              }, //
+
+                              // The child of the Slidable is what the user sees when the
+                              // component is not dragged.
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.pink,
+                                  child: Text(userSnapshot[index]["name"][0]),
+                                ),
+                                title: Text(userSnapshot[index]["name"]),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ListLectures(courseID:userSnapshot[index].id)),
+                                  );
+                                }, //
+                              ),
                             );
                           });
                     }),
@@ -215,4 +322,10 @@ class _AdminDashboardState extends State<AdminDashboard>
     }
     return FloatingActionButton(onPressed: () {});
   }
+}
+
+void remove(String doctype, String id) {
+  final db = FirebaseFirestore.instance;
+
+  db.collection(doctype).doc(id).delete();
 }

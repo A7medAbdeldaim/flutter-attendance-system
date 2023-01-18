@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:untitled/list_teacher_courses.dart';
 import 'package:untitled/login_student.dart';
 import 'SecondScreen.dart';
-import 'list_courses.dart';
+import 'list_student_courses.dart';
 
 class LoginTeacher extends StatefulWidget {
   const LoginTeacher({super.key});
@@ -17,6 +19,7 @@ class _LoginTeacherState extends State<LoginTeacher> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool _passwordHasError = true;
   bool _idHasError = true;
+  final LocalStorage storage = LocalStorage('localstorage_app');
 
   @override
   Widget build(BuildContext context) {
@@ -146,11 +149,12 @@ class _LoginTeacherState extends State<LoginTeacher> {
                                     .get()
                                     .then((value) {
                                   for (var element in value.docs) {
+                                    storage.setItem('ID', element.id);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const ListCourses()));
+                                                const ListTeacherCourses()));
                                   }
                                 });
 

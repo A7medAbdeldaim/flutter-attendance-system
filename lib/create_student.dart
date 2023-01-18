@@ -27,17 +27,7 @@ class _CreateStudentState extends State<CreateStudent> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Create a new student',
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
-        FormBuilderLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      //supportedLocales: FormBuilderLocalizations.delegate.supportedLocales,
-      home: CompleteForm(),
-    );
+    return const CompleteForm();
   }
 }
 
@@ -206,7 +196,7 @@ class _CompleteFormState extends State<CompleteForm> {
                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text("Added Successfully"),
                           ));
-                          _formKey.currentState?.reset();
+                          Navigator.of(context).pop();
 
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar( const SnackBar(

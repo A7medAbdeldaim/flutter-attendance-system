@@ -5,7 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:untitled/admin_dashboard.dart';
 import 'package:untitled/login_teacher.dart';
 import 'SecondScreen.dart';
-import 'list_courses.dart';
+import 'list_student_courses.dart';
 
 class LoginAdmin extends StatefulWidget {
   const LoginAdmin({super.key});

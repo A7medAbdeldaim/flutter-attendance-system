@@ -7,59 +7,64 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'MultiSelect.dart';
 
 
-class CreateTeacher extends StatefulWidget {
-  const CreateTeacher({super.key});
+class CreateLecture extends StatefulWidget {
+  const CreateLecture({super.key, required this.courseID});
+  final String courseID;
 
   @override
-  State<CreateTeacher> createState() => _CreateTeacherState();
+  State<CreateLecture> createState() => _CreateLectureState(courseID: this.courseID);
 }
 
-void insertData(data) {
+void insertData(unmodifiedData, courseID) {
   final db = FirebaseFirestore.instance;
-  db.collection("teachers").add(data).then((DocumentReference doc) {
+
+  var data = {
+    "name": unmodifiedData['name'],
+    "start_date": unmodifiedData['start_date'],
+    "end_date": unmodifiedData['end_date'],
+    "course_id": courseID,
+  };
+
+  db.collection("lectures").add(data).then((DocumentReference doc) {
     print('DocumentSnapshot added with ID: ${doc.id}');
   });
 }
 
-class _CreateTeacherState extends State<CreateTeacher> {
+class _CreateLectureState extends State<CreateLecture> {
+  _CreateLectureState({required this.courseID});
+
+  final String courseID;
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Create a new teacher',
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
-        FormBuilderLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      //supportedLocales: FormBuilderLocalizations.delegate.supportedLocales,
-      home: CompleteForm(),
-    );
+    return CompleteForm(courseID: courseID);
   }
 }
 
 class CompleteForm extends StatefulWidget {
-  const CompleteForm({Key? key}) : super(key: key);
+  CompleteForm({Key? key, required this.courseID}) : super(key: key);
+  final String courseID;
 
   @override
   State<CompleteForm> createState() {
-    return _CompleteFormState();
+    return _CompleteFormState(courseID: this.courseID);
   }
 }
 
 class _CompleteFormState extends State<CompleteForm> {
+  _CompleteFormState({required this.courseID});
+  final String courseID;
+
   bool autoValidate = true;
   bool readOnly = false;
   bool showSegmentedControl = true;
   final _formKey = GlobalKey<FormBuilderState>();
-  bool _idHasError = true;
   bool _nameHasError = true;
-  bool _emailHasError = true;
-  bool _passwordHasError = true;
-
+  bool _startDateHasError = true;
+  bool _endDateHasError = true;
 
   void _onChanged(dynamic val) => debugPrint(val.toString());
 
@@ -67,7 +72,7 @@ class _CompleteFormState extends State<CompleteForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create a new teacher'),
+        title: const Text('Create a new lecture'),
         backgroundColor: Colors.pink,
       ),
       body: Padding(
@@ -88,35 +93,9 @@ class _CompleteFormState extends State<CompleteForm> {
                     const SizedBox(height: 15),
                     FormBuilderTextField(
                       autovalidateMode: AutovalidateMode.always,
-                      name: 'id',
-                      decoration: InputDecoration(
-                        labelText: 'KKU ID',
-                        // labelStyle: const TextStyle(color: Colors.pink),
-                        suffixIcon: _idHasError
-                            ? const Icon(Icons.error, color: Colors.red)
-                            : const Icon(Icons.check, color: Colors.green),
-                      ),
-                      onChanged: (val) {
-                        setState(() {
-                          _idHasError = !(_formKey.currentState?.fields['id']
-                              ?.validate() ??
-                              false);
-                        });
-                      },
-                      // valueTransformer: (text) => num.tryParse(text),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.numeric(),
-                      ]),
-                      // initialValue: '0000000',
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                    ),
-                    FormBuilderTextField(
-                      autovalidateMode: AutovalidateMode.always,
                       name: 'name',
                       decoration: InputDecoration(
-                        labelText: 'Full Name',
+                        labelText: 'Lecture Name',
                         // labelStyle: const TextStyle(color: Colors.pink),
                         suffixIcon: _nameHasError
                             ? const Icon(Icons.error, color: Colors.red)
@@ -124,62 +103,9 @@ class _CompleteFormState extends State<CompleteForm> {
                       ),
                       onChanged: (val) {
                         setState(() {
-                          _nameHasError = !(_formKey.currentState?.fields['name']
-                              ?.validate() ??
-                              false);
-                        });
-                      },
-                      // valueTransformer: (text) => num.tryParse(text),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                      // initialValue: '0000000',
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                    ),
-                    FormBuilderTextField(
-                      autovalidateMode: AutovalidateMode.always,
-                      name: 'email',
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        // labelStyle: const TextStyle(color: Colors.pink),
-                        suffixIcon: _emailHasError
-                            ? const Icon(Icons.error, color: Colors.red)
-                            : const Icon(Icons.check, color: Colors.green),
-                      ),
-                      onChanged: (val) {
-                        setState(() {
-                          _emailHasError = !(_formKey.currentState?.fields['email']
-                              ?.validate() ??
-                              false);
-                        });
-                      },
-                      // valueTransformer: (text) => num.tryParse(text),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.email(),
-                      ]),
-                      // initialValue: '0000000',
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                    ),
-                    FormBuilderTextField(
-                      autovalidateMode: AutovalidateMode.always,
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      name: 'password',
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        // labelStyle: const TextStyle(color: Colors.pink),
-                        suffixIcon: _passwordHasError
-                            ? const Icon(Icons.error, color: Colors.red)
-                            : const Icon(Icons.check, color: Colors.green),
-                      ),
-                      onChanged: (val) {
-                        setState(() {
-                          _passwordHasError = !(_formKey.currentState?.fields['password']
-                              ?.validate() ??
+                          _nameHasError = !(_formKey
+                                  .currentState?.fields['name']
+                                  ?.validate() ??
                               false);
                         });
                       },
@@ -192,9 +118,62 @@ class _CompleteFormState extends State<CompleteForm> {
                       textInputAction: TextInputAction.next,
                     ),
                     const SizedBox(height: 25),
+                    FormBuilderDateTimePicker(
+                      name: 'start_date',
+                      enabled: true,
+                      decoration: InputDecoration(
+                          labelText: 'Start Date',
+                          suffixIcon: _startDateHasError
+                              ? const Icon(Icons.error, color: Colors.red)
+                              : const Icon(Icons.check, color: Colors.green),
+                          labelStyle: const TextStyle(
+                              fontWeight: FontWeight.normal)),
+
+                      onChanged: (val) {
+                        setState(() {
+                          _startDateHasError = !(_formKey
+                              .currentState?.fields['start_date']
+                              ?.validate() ??
+                              false);
+                        });
+                      },
+                      style: const TextStyle(
+                          fontWeight: FontWeight.normal),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                    ),
+                    const SizedBox(height: 25),
+                    FormBuilderDateTimePicker(
+                      name: 'end_date',
+                      enabled: true,
+                      decoration: InputDecoration(
+                          labelText: 'End Date',
+                          suffixIcon: _endDateHasError
+                              ? const Icon(Icons.error, color: Colors.red)
+                              : const Icon(Icons.check, color: Colors.green),
+                          labelStyle: const TextStyle(
+                              fontWeight: FontWeight.normal)),
+
+                      onChanged: (val) {
+                        setState(() {
+                          _endDateHasError = !(_formKey
+                              .currentState?.fields['end_date']
+                              ?.validate() ??
+                              false);
+                        });
+                      },
+                      style: const TextStyle(
+                          fontWeight: FontWeight.normal),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                    ),
+                    const SizedBox(height: 25),
                   ],
                 ),
               ),
+              const SizedBox(height: 15),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -202,14 +181,15 @@ class _CompleteFormState extends State<CompleteForm> {
                       onPressed: () {
                         if (_formKey.currentState?.saveAndValidate() ?? false) {
                           debugPrint(_formKey.currentState?.value.toString());
-                          insertData(_formKey.currentState?.value);
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          insertData(_formKey.currentState?.value, courseID);
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
                             content: Text("Added Successfully"),
                           ));
-                          _formKey.currentState?.reset();
-
+                          Navigator.of(context).pop();
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar( const SnackBar(
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
                             content: Text("Validation Failed"),
                           ));
                         }
@@ -234,12 +214,8 @@ class _CompleteFormState extends State<CompleteForm> {
                         padding: const EdgeInsets.all(20.0),
                       ),
                       // color: Theme.of(context).colorScheme.secondary,
-                      child: Text(
-                        'Reset',
-                        style: TextStyle(
-                            color: Colors.black
-                        )
-                      ),
+                      child:
+                          const Text('Reset', style: TextStyle(color: Colors.black)),
                     ),
                   ),
                 ],

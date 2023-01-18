@@ -16,8 +16,18 @@ class CreateCourse extends StatefulWidget {
   State<CreateCourse> createState() => _CreateCourseState();
 }
 
-void insertData(data) {
+List<String> _selectedItemsTeacher = [];
+List<String> _selectedItemsStudent = [];
+
+void insertData(unmodifiedData) {
   final db = FirebaseFirestore.instance;
+
+  var data = {
+    "name": unmodifiedData['name'],
+    "students": _selectedItemsStudent,
+    "teachers": _selectedItemsTeacher
+  };
+
   db.collection("courses").add(data).then((DocumentReference doc) {
     print('DocumentSnapshot added with ID: ${doc.id}');
   });
@@ -26,17 +36,7 @@ void insertData(data) {
 class _CreateCourseState extends State<CreateCourse> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Create a new course',
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
-        FormBuilderLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      //supportedLocales: FormBuilderLocalizations.delegate.supportedLocales,
-      home: CompleteForm(),
-    );
+    return const CompleteForm();
   }
 }
 
@@ -54,25 +54,19 @@ class _CompleteFormState extends State<CompleteForm> {
   bool readOnly = false;
   bool showSegmentedControl = true;
   final _formKey = GlobalKey<FormBuilderState>();
-  bool _idHasError = true;
   bool _nameHasError = true;
-  bool _emailHasError = true;
-  bool _passwordHasError = true;
 
   void _onChanged(dynamic val) => debugPrint(val.toString());
-
-  List<String> _selectedItemsTeacher = [];
-  List<String> _selectedItemsStudent = [];
 
   void _showMultiSelectStudents() async {
     final db = FirebaseFirestore.instance;
     // a list of selectable items
     // these items can be hard-coded or dynamically fetched from a database/API
-    List<String> studentsArr = [];
+    List studentsArr = [];
 
     await db.collection("students").get().then((value) {
       for (var item in value.docs) {
-        studentsArr.add(item.get("name"));
+        studentsArr.add(Member(item.get('name'), item.id));
       }
     });
 
@@ -95,11 +89,11 @@ class _CompleteFormState extends State<CompleteForm> {
     final db = FirebaseFirestore.instance;
     // a list of selectable items
     // these items can be hard-coded or dynamically fetched from a database/API
-    List<String> teachersArr = [];
+    List teachersArr = [];
 
     await db.collection("teachers").get().then((value) {
       for (var item in value.docs) {
-        teachersArr.add(item.get("name"));
+        teachersArr.add(Member(item.get('name'), item.id));
       }
     });
 
@@ -168,38 +162,36 @@ class _CompleteFormState extends State<CompleteForm> {
                       textInputAction: TextInputAction.next,
                     ),
                     const SizedBox(height: 25),
-
-                    ElevatedButton(
-                      onPressed: _showMultiSelectTeachers,
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.pink,
+                    Row(children: [
+                      ElevatedButton(
+                        onPressed: _showMultiSelectTeachers,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.pinkAccent,
+                          padding: const EdgeInsets.all(20.0),
+                        ),
+                        child: const Text('Add Teachers'),
                       ),
-                      child: const Text('Add Teachers'),
-                    ),
-                    // display selected items
-                    Wrap(
-                      children: _selectedItemsTeacher
-                          .map((e) => Chip(
-                                label: Text(e),
-                              ))
-                          .toList(),
-                    ),
+                      // display selected items
+                      Chip(
+                          label: Text('${_selectedItemsTeacher.length.toString()} teachers added')
+                      ),
+                    ]),
                     const SizedBox(height: 15),
-
-                    ElevatedButton(
-                      onPressed: _showMultiSelectStudents,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink,
-                      ),
-                      child: const Text('Add Students'),
-                    ),
-                    // display selected items
-                    Wrap(
-                      children: _selectedItemsStudent
-                          .map((e) => Chip(
-                        label: Text(e),
-                      ))
-                          .toList(),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: _showMultiSelectStudents,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.pinkAccent,
+                            padding: const EdgeInsets.all(20.0),
+                          ),
+                          child: const Text('Add Students'),
+                        ),
+                        // display selected items
+                        Chip(
+                          label: Text('${_selectedItemsStudent.length.toString()} students added')
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -217,7 +209,7 @@ class _CompleteFormState extends State<CompleteForm> {
                               .showSnackBar(const SnackBar(
                             content: Text("Added Successfully"),
                           ));
-                          _formKey.currentState?.reset();
+                          Navigator.of(context).pop();
                         } else {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
@@ -256,5 +248,21 @@ class _CompleteFormState extends State<CompleteForm> {
         ),
       ),
     );
+  }
+}
+
+class Member {
+  String name;
+  String id;
+
+  Member(this.name, this.id);
+
+  @override
+  String toString() {
+    return name;
+  }
+
+  String getID() {
+    return id;
   }
 }

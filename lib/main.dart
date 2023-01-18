@@ -1,7 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:untitled/admin_dashboard.dart';
-import 'package:untitled/craete_teacher.dart';
+import 'package:untitled/create_lecture.dart';
+import 'package:untitled/create_teacher.dart';
+import 'package:untitled/edit_course.dart';
+import 'package:untitled/edit_lecture.dart';
+import 'package:untitled/list_lectures.dart';
+import 'create_course.dart';
 import 'firebase_options.dart';
 import 'login_admin.dart';
 import 'login_student.dart';
@@ -10,20 +16,25 @@ import 'login_teacher.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
-  // runApp(
-  //   const MaterialApp(
-  //     debugShowCheckedModeBanner: false,
-  //     title: "Login Student ",
-  //     home: AdminDashboard(),
-  //   ),
-  // );
+  
+  if (true) {
+    runApp(const MyApp());
+  } else {
+    runApp(
+      const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "Login Student ",
+        // home: EditLecture(lectureID: "L8YJZSRn1aFzIRWH3lfb"),
+        home: EditCourse(courseID: "KcY485CKwkw3EdNzbM9r"),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -64,6 +75,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  final LocalStorage storage = LocalStorage('localstorage_app');
+
   int _counter = 0;
 
   void _incrementCounter() {
