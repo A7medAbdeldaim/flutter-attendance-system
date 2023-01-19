@@ -118,6 +118,8 @@ class _CompleteFormState extends State<CompleteForm> {
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
                               FormBuilderValidators.numeric(),
+                              FormBuilderValidators.minLength(4),
+                              FormBuilderValidators.maxLength(5),
                             ]),
                             // initialValue: '0000000',
                             keyboardType: TextInputType.number,
@@ -171,6 +173,9 @@ class _CompleteFormState extends State<CompleteForm> {
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
                               FormBuilderValidators.email(),
+                                  (input) => RegExp(
+                                  r'^[A-Za-z0-9._%+-]+@kku\.edu\.sa$')
+                                  .hasMatch(input!) ? null : "email should be on kku.edu.sa",
                             ]),
                             // initialValue: '0000000',
                             keyboardType: TextInputType.emailAddress,
@@ -200,6 +205,10 @@ class _CompleteFormState extends State<CompleteForm> {
                             // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
+                              FormBuilderValidators.equalLength(10),
+                                  (input) => RegExp(
+                                  r'^(?=.*[a-zA-Z])(?=.*[0-9])')
+                                  .hasMatch(input!) ? null : "Password should contain characters and numbers",
                             ]),
                             // initialValue: '0000000',
                             keyboardType: TextInputType.text,

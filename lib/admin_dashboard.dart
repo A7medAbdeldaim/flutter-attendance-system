@@ -11,6 +11,7 @@ import 'package:untitled/edit_teacher.dart';
 import 'package:untitled/list_lectures.dart';
 import 'SecondScreen.dart';
 import 'login_teacher.dart';
+import 'nav_drawer.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -49,6 +50,7 @@ class _AdminDashboardState extends State<AdminDashboard>
         home: DefaultTabController(
           length: 3,
           child: Scaffold(
+            drawer: NavDrawer(),
             appBar: AppBar(
               title: const Text('Admin Dashboard'),
               backgroundColor: Colors.pink,

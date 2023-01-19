@@ -18,6 +18,7 @@ class _ListStudentCoursesState extends State<ListStudentCourses> {
 
   @override
   Widget build(BuildContext context) {
+    print('Hena: ${storage.getItem('studentID')}');
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by

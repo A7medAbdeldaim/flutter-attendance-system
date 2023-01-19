@@ -59,7 +59,7 @@ class _ListTeacherLecturesState extends State<ListTeacherLectures> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EnterOTP()),
+                            builder: (context) => const GenerateOTP()),
                       );
                     }, //
                   );

@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:untitled/login_teacher.dart';
+import 'package:untitled/student_dashboard.dart';
 import 'SecondScreen.dart';
 import 'list_student_courses.dart';
 
@@ -148,12 +149,12 @@ class _LoginStudentState extends State<LoginStudent> {
                                     .get()
                                     .then((value) {
                                   for (var element in value.docs) {
-                                    storage.setItem('ID', element.id);
+                                    storage.setItem('studentID', element.id);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const ListStudentCourses()));
+                                                const StudentDashboard()));
                                   }
                                 });
 

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:untitled/admin_dashboard.dart';
 import 'package:untitled/login_teacher.dart';
 import 'SecondScreen.dart';
@@ -18,6 +19,7 @@ class _LoginAdminState extends State<LoginAdmin> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool _passwordHasError = true;
   bool _idHasError = true;
+  final LocalStorage storage = LocalStorage('localstorage_app');
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +147,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                                     .get()
                                     .then((value) {
                                   for (var element in value.docs) {
+                                    storage.setItem('adminID', element.id);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(

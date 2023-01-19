@@ -7,6 +7,8 @@ import 'package:untitled/create_teacher.dart';
 import 'package:untitled/edit_course.dart';
 import 'package:untitled/edit_lecture.dart';
 import 'package:untitled/list_lectures.dart';
+import 'package:untitled/student_dashboard.dart';
+import 'package:untitled/teacher_dashboard.dart';
 import 'create_course.dart';
 import 'firebase_options.dart';
 import 'login_admin.dart';
@@ -16,8 +18,36 @@ import 'login_teacher.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  
+  final LocalStorage storage = LocalStorage('localstorage_app');
+
+  print(storage.getItem('adminID'));
   if (true) {
+    if (storage.getItem('adminID') != null) {
+      runApp(
+        const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Admin Dashboard",
+          home: AdminDashboard(),
+        ),
+      );
+    } else if (storage.getItem('studentID') != null) {
+      runApp(
+        const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Student Dashboard",
+          home: StudentDashboard(),
+        ),
+      );
+    } else if (storage.getItem('teacherID') != null) {
+      runApp(
+        const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Teacher Dashboard",
+          home: TeacherDashboard(),
+        ),
+      );
+    }
+
     runApp(const MyApp());
   } else {
     runApp(
@@ -25,7 +55,8 @@ void main() async{
         debugShowCheckedModeBanner: false,
         title: "Login Student ",
         // home: EditLecture(lectureID: "L8YJZSRn1aFzIRWH3lfb"),
-        home: EditCourse(courseID: "KcY485CKwkw3EdNzbM9r"),
+        home: StudentDashboard(),
+        // home: EditCourse(courseID: "KcY485CKwkw3EdNzbM9r"),
       ),
     );
   }
