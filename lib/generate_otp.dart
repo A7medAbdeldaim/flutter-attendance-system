@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'dart:math';
 import 'SecondScreen.dart';
 
@@ -11,16 +13,22 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
     length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
 class GenerateOTP extends StatefulWidget {
-  const GenerateOTP({super.key});
+  GenerateOTP({super.key, required this.snapshot});
+  final snapshot;
 
   @override
-  State<GenerateOTP> createState() => _GenerateOTPState();
+  State<GenerateOTP> createState() => _GenerateOTPState(snapshot: this.snapshot);
 }
 
 class _GenerateOTPState extends State<GenerateOTP> {
+  _GenerateOTPState({required this.snapshot});
+  final snapshot;
+  final LocalStorage storage = LocalStorage('localstorage_app');
+  final db = FirebaseFirestore.instance;
+
   String otp = '';
   String btnText1 = 'Generate';
-  int x = 30;
+  int x = 600;
   bool shouldAbsorb = false;
   late Timer _timer;
 
@@ -85,12 +93,17 @@ class _GenerateOTPState extends State<GenerateOTP> {
               AbsorbPointer(
                 absorbing: shouldAbsorb,
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    otp = getRandomString(6);
+                    await db.collection("lectures")
+                        .doc(snapshot)
+                        .set({'otp': otp}, SetOptions(merge: true));
                     setState(() {
-                      otp = getRandomString(6);
-                      x = 30;
+                      otp;
+                      x = 600;
                       btnText1 = 'Available until $x';
                       shouldAbsorb = true;
+
                     });
                   },
                   child: Container(
