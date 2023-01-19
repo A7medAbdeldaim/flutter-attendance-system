@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:untitled/list_teacher_courses.dart';
 import 'package:untitled/login_student.dart';
+import 'package:untitled/teacher_dashboard.dart';
 import 'SecondScreen.dart';
 import 'list_student_courses.dart';
 
@@ -154,7 +155,7 @@ class _LoginTeacherState extends State<LoginTeacher> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const ListTeacherCourses()));
+                                                const TeacherDashboard()));
                                   }
                                 });
 
