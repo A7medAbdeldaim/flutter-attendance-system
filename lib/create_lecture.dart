@@ -26,6 +26,7 @@ void insertData(unmodifiedData, courseID) {
     "start_date": unmodifiedData['start_date'],
     "end_date": unmodifiedData['end_date'],
     "course_id": courseID,
+    "duration": unmodifiedData['duration'],
   };
 
   db.collection("lectures").add(data).then((DocumentReference doc) {
@@ -73,7 +74,7 @@ class _CompleteFormState extends State<CompleteForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create a new lecture'),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -96,7 +97,7 @@ class _CompleteFormState extends State<CompleteForm> {
                       name: 'name',
                       decoration: InputDecoration(
                         labelText: 'Lecture Name',
-                        // labelStyle: const TextStyle(color: Colors.pink),
+                        // labelStyle: const TextStyle(color: Colors.blueGrey),
                         suffixIcon: _nameHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -170,10 +171,22 @@ class _CompleteFormState extends State<CompleteForm> {
                       ]),
                     ),
                     const SizedBox(height: 25),
+                    FormBuilderRadioGroup(
+                      name: 'duration',
+                      initialValue: "Theoretical (1 Hour)",
+                      decoration: const InputDecoration(
+                          labelText: 'Duration',
+                          labelStyle: TextStyle(
+                              fontWeight: FontWeight.normal)),
+                      options: const [
+                        FormBuilderFieldOption(value: "Theoretical (1 Hour)"),
+                        FormBuilderFieldOption(value: "Practical (2 Hours)"),
+                      ],
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -195,7 +208,7 @@ class _CompleteFormState extends State<CompleteForm> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink, // background
+                        backgroundColor: Colors.blueGrey, // background
                         padding: const EdgeInsets.all(20.0),
                       ),
                       child: const Text(

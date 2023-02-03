@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/create_course.dart';
+import 'dart:convert';
+
 
 class MultiSelect extends StatefulWidget {
   final List items;
@@ -10,7 +13,7 @@ class MultiSelect extends StatefulWidget {
 
 class _MultiSelectState extends State<MultiSelect> {
   // this variable holds the selected items
-  final List<String> _selectedItems = [];
+  final List _selectedItems = [];
 
 // This function is triggered when a checkbox is checked or unchecked
   void _itemChange(String itemValue, bool isSelected) {
@@ -41,10 +44,10 @@ class _MultiSelectState extends State<MultiSelect> {
         child: ListBody(
           children: widget.items
               .map((item) => CheckboxListTile(
-            value: _selectedItems.contains(item.getID()),
+            value: _selectedItems.contains(jsonEncode(item)),
             title: Text(item.toString()),
             controlAffinity: ListTileControlAffinity.leading,
-            onChanged: (isChecked) => _itemChange(item.getID(), isChecked!),
+            onChanged: (isChecked) => _itemChange(jsonEncode(item), isChecked!),
           ))
               .toList(),
         ),
@@ -57,7 +60,7 @@ class _MultiSelectState extends State<MultiSelect> {
         ElevatedButton(
           onPressed: _submit,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.pink,
+            backgroundColor: Colors.blueGrey,
           ),
           child: const Text('Submit'),
         ),

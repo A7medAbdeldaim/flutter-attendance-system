@@ -57,7 +57,7 @@ class _CompleteFormState extends State<CompleteForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create a new teacher'),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -80,7 +80,7 @@ class _CompleteFormState extends State<CompleteForm> {
                       name: 'id',
                       decoration: InputDecoration(
                         labelText: 'KKU ID',
-                        // labelStyle: const TextStyle(color: Colors.pink),
+                        // labelStyle: const TextStyle(color: Colors.blueGrey),
                         suffixIcon: _idHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -108,7 +108,7 @@ class _CompleteFormState extends State<CompleteForm> {
                       name: 'name',
                       decoration: InputDecoration(
                         labelText: 'Full Name',
-                        // labelStyle: const TextStyle(color: Colors.pink),
+                        // labelStyle: const TextStyle(color: Colors.blueGrey),
                         suffixIcon: _nameHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -133,7 +133,7 @@ class _CompleteFormState extends State<CompleteForm> {
                       name: 'email',
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        // labelStyle: const TextStyle(color: Colors.pink),
+                        // labelStyle: const TextStyle(color: Colors.blueGrey),
                         suffixIcon: _emailHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -165,7 +165,7 @@ class _CompleteFormState extends State<CompleteForm> {
                       name: 'password',
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        // labelStyle: const TextStyle(color: Colors.pink),
+                        // labelStyle: const TextStyle(color: Colors.blueGrey),
                         suffixIcon: _passwordHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -213,7 +213,7 @@ class _CompleteFormState extends State<CompleteForm> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink, // background
+                        backgroundColor: Colors.blueGrey, // background
                         padding: const EdgeInsets.all(20.0),
                       ),
                       child: const Text(

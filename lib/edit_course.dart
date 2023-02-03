@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,16 +19,23 @@ class EditCourse extends StatefulWidget {
   State<EditCourse> createState() => _EditCourseState(courseID: this.courseID);
 }
 
-List<String> _selectedItemsTeacher = [];
-List<String> _selectedItemsStudent = [];
+List _selectedItemsTeacher = [];
+List _selectedItemsStudent = [];
 
 void editData(unmodifiedData, courseID) {
   final db = FirebaseFirestore.instance;
 
+  List studentIDs = _selectedItemsStudent.map((e) => jsonDecode(e)["id"]).toList();
+  List teacherIDs = _selectedItemsTeacher.map((e) => jsonDecode(e)["id"]).toList();
+
   var data = {
     "name": unmodifiedData['name'],
+    "code": unmodifiedData['code'],
+    "duration": unmodifiedData['duration'],
     "students": _selectedItemsStudent,
-    "teachers": _selectedItemsTeacher
+    "teachers": _selectedItemsTeacher,
+    "student_ids": studentIDs,
+    "teacher_ids": teacherIDs,
   };
 
   db.collection("courses").doc(courseID).set(data, SetOptions(merge: true));
@@ -62,6 +71,8 @@ class _CompleteFormState extends State<CompleteForm> {
   bool showSegmentedControl = true;
   final _formKey = GlobalKey<FormBuilderState>();
   bool _nameHasError = false;
+  bool _codeHasError = true;
+  bool _durationHasError = true;
   bool loaded = false;
   final db = FirebaseFirestore.instance;
 
@@ -78,7 +89,7 @@ class _CompleteFormState extends State<CompleteForm> {
       }
     });
 
-    List<String>? results = await showDialog(
+    List? results = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return MultiSelect(items: studentsArr);
@@ -104,7 +115,7 @@ class _CompleteFormState extends State<CompleteForm> {
       }
     });
 
-    List<String>? results = await showDialog(
+    List? results = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return MultiSelect(items: teachersArr);
@@ -133,7 +144,7 @@ class _CompleteFormState extends State<CompleteForm> {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Edit course'),
-          backgroundColor: Colors.pink,
+          backgroundColor: Colors.blueGrey,
         ),
         body: Padding(
           padding: const EdgeInsets.all(10),
@@ -157,7 +168,7 @@ class _CompleteFormState extends State<CompleteForm> {
                         initialValue: snapshot.data?.get('name'),
                         decoration: InputDecoration(
                           labelText: 'Course Name',
-                          // labelStyle: const TextStyle(color: Colors.pink),
+                          // labelStyle: const TextStyle(color: Colors.blueGrey),
                           suffixIcon: _nameHasError
                               ? const Icon(Icons.error, color: Colors.red)
                               : const Icon(Icons.check, color: Colors.green),
@@ -179,11 +190,66 @@ class _CompleteFormState extends State<CompleteForm> {
                         textInputAction: TextInputAction.next,
                       ),
                       const SizedBox(height: 25),
+                      FormBuilderTextField(
+                        autovalidateMode: AutovalidateMode.always,
+                        name: 'code',
+                        initialValue: snapshot.data?.get('code'),
+                        decoration: InputDecoration(
+                          labelText: 'Course Code',
+                          // labelStyle: const TextStyle(color: Colors.blueGrey),
+                          suffixIcon: _codeHasError
+                              ? const Icon(Icons.error, color: Colors.red)
+                              : const Icon(Icons.check, color: Colors.green),
+                        ),
+                        onChanged: (val) {
+                          setState(() {
+                            _codeHasError = !(_formKey
+                                .currentState?.fields['code']
+                                ?.validate() ??
+                                false);
+                          });
+                        },
+                        // valueTransformer: (text) => num.tryParse(text),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                        ]),
+                        // initialValue: '0000000',
+                        textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(height: 25),
+                      FormBuilderTextField(
+                        autovalidateMode: AutovalidateMode.always,
+                        name: 'duration',
+                        initialValue: snapshot.data?.get('duration'),
+                        decoration: InputDecoration(
+                          labelText: 'Course Duration in Hours',
+                          // labelStyle: const TextStyle(color: Colors.blueGrey),
+                          suffixIcon: _durationHasError
+                              ? const Icon(Icons.error, color: Colors.red)
+                              : const Icon(Icons.check, color: Colors.green),
+                        ),
+                        onChanged: (val) {
+                          setState(() {
+                            _durationHasError = !(_formKey
+                                .currentState?.fields['duration']
+                                ?.validate() ??
+                                false);
+                          });
+                        },
+                        // valueTransformer: (text) => num.tryParse(text),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.numeric(),
+                          FormBuilderValidators.required(),
+                        ]),
+                        // initialValue: '0000000',
+                        textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(height: 25),
                       Row(children: [
                         ElevatedButton(
                           onPressed: _showMultiSelectTeachers,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.pinkAccent,
+                            backgroundColor: Colors.blueGrey,
                             padding: const EdgeInsets.all(20.0),
                           ),
                           child: const Text('Add Teachers'),
@@ -200,7 +266,7 @@ class _CompleteFormState extends State<CompleteForm> {
                           ElevatedButton(
                             onPressed: _showMultiSelectStudents,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.pinkAccent,
+                              backgroundColor: Colors.blueGrey,
                               padding: const EdgeInsets.all(20.0),
                             ),
                             child: const Text('Add Students'),
@@ -238,7 +304,7 @@ class _CompleteFormState extends State<CompleteForm> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.pink, // background
+                          backgroundColor: Colors.blueGrey, // background
                           padding: const EdgeInsets.all(20.0),
                         ),
                         child: const Text(
@@ -287,4 +353,9 @@ class Member {
   String getID() {
     return id;
   }
+
+  Map toJson() => {
+    'name': name,
+    'id': id,
+  };
 }

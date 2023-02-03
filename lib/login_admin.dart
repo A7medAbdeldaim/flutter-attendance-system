@@ -25,7 +25,7 @@ class _LoginAdminState extends State<LoginAdmin> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.pinkAccent,
+        backgroundColor: Colors.blueGrey,
         body: Column(
           children: [
             Container(
@@ -73,7 +73,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                             name: 'email',
                             decoration: InputDecoration(
                               labelText: 'Email',
-                              // labelStyle: const TextStyle(color: Colors.pink),
+                              // labelStyle: const TextStyle(color: Colors.blueGrey),
                               suffixIcon: _idHasError
                                   ? const Icon(Icons.error, color: Colors.red)
                                   : const Icon(Icons.check,
@@ -106,7 +106,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                             name: 'password',
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              // labelStyle: const TextStyle(color: Colors.pink),
+                              // labelStyle: const TextStyle(color: Colors.blueGrey),
                               suffixIcon: _passwordHasError
                                   ? const Icon(Icons.error, color: Colors.red)
                                   : const Icon(Icons.check,
@@ -169,7 +169,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
-                                color: Colors.pink,
+                                color: Colors.blueGrey,
                               ),
                               child: const Center(
                                 child: Padding(
@@ -202,7 +202,7 @@ class _LoginAdminState extends State<LoginAdmin> {
                                   child: const Text(
                                     'Login Teacher',
                                     style: TextStyle(
-                                      color: Colors.pink,
+                                      color: Colors.blueGrey,
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500,
                                     ),

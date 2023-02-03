@@ -28,7 +28,7 @@ class _SecondScreenState extends State<SecondScreen> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text("Check-in"),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.white,
       body: Center(
@@ -45,12 +45,12 @@ class _SecondScreenState extends State<SecondScreen> {
                   return Column(children: [
                     Text(
                       "You checked in at ${snapshot.data?.get('check_in').toDate().toString()}",
-                      style: TextStyle(fontSize: 38, color: Colors.pink),
+                      style: TextStyle(fontSize: 38, color: Colors.blueGrey),
                       textAlign: TextAlign.center,
                     ),
                     Text(
                       snapshot.data?.get('is_late') ? 'You are late' : 'You are on time',
-                      style: const TextStyle(fontSize: 38, color: Colors.pink),
+                      style: const TextStyle(fontSize: 38, color: Colors.blueGrey),
                       textAlign: TextAlign.center,
                     ),
 
@@ -68,7 +68,7 @@ class _SecondScreenState extends State<SecondScreen> {
                             MaterialPageRoute(builder: (context) => StudentDashboard()));
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pinkAccent,
+                        backgroundColor: Colors.blueGrey,
                         padding: const EdgeInsets.all(20.0),
                       ),
                       child: const Text('Checkout'),

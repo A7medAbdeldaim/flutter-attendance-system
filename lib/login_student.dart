@@ -25,7 +25,7 @@ class _LoginStudentState extends State<LoginStudent> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.pinkAccent,
+        backgroundColor: Colors.blueGrey,
         body: Column(
           children: [
             Container(
@@ -73,7 +73,7 @@ class _LoginStudentState extends State<LoginStudent> {
                             name: 'id',
                             decoration: InputDecoration(
                               labelText: 'KKU ID',
-                              // labelStyle: const TextStyle(color: Colors.pink),
+                              // labelStyle: const TextStyle(color: Colors.blueGrey),
                               suffixIcon: _idHasError
                                   ? const Icon(Icons.error, color: Colors.red)
                                   : const Icon(Icons.check,
@@ -106,7 +106,7 @@ class _LoginStudentState extends State<LoginStudent> {
                             name: 'password',
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              // labelStyle: const TextStyle(color: Colors.pink),
+                              // labelStyle: const TextStyle(color: Colors.blueGrey),
                               suffixIcon: _passwordHasError
                                   ? const Icon(Icons.error, color: Colors.red)
                                   : const Icon(Icons.check,
@@ -172,7 +172,7 @@ class _LoginStudentState extends State<LoginStudent> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
-                                color: Colors.pink,
+                                color: Colors.blueGrey,
                               ),
                               child: const Center(
                                 child: Padding(
@@ -205,7 +205,7 @@ class _LoginStudentState extends State<LoginStudent> {
                                   child: const Text(
                                     'Login Teacher',
                                     style: TextStyle(
-                                      color: Colors.pink,
+                                      color: Colors.blueGrey,
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500,
                                     ),

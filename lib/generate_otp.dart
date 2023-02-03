@@ -8,6 +8,7 @@ import 'SecondScreen.dart';
 
 const _chars = '1234567890';
 Random _rnd = Random();
+int otpTimeout = 300;
 
 String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
     length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
@@ -28,7 +29,6 @@ class _GenerateOTPState extends State<GenerateOTP> {
 
   String otp = '';
   String btnText1 = 'Generate';
-  int x = 600;
   bool shouldAbsorb = false;
   late Timer _timer;
 
@@ -38,9 +38,9 @@ class _GenerateOTPState extends State<GenerateOTP> {
       _timer = Timer.periodic(Duration(seconds: 1), (timer) {
         setState(() {
           if (shouldAbsorb == true) {
-            x--;
-            btnText1 = 'Available until $x';
-            if (x < 0) {
+            otpTimeout--;
+            btnText1 = 'Available until $otpTimeout';
+            if (otpTimeout < 0) {
               otp = '';
               btnText1 = 'Generate';
               shouldAbsorb = false;
@@ -65,7 +65,7 @@ class _GenerateOTPState extends State<GenerateOTP> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text("Generate OTP"),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.white,
       body: Center(
@@ -97,11 +97,14 @@ class _GenerateOTPState extends State<GenerateOTP> {
                     otp = getRandomString(6);
                     await db.collection("lectures")
                         .doc(snapshot)
-                        .set({'otp': otp}, SetOptions(merge: true));
+                        .set({
+                          'otp': otp,
+                          'otp_expire': DateTime.now().add(const Duration(seconds: 300)).millisecondsSinceEpoch,
+                        }, SetOptions(merge: true));
                     setState(() {
                       otp;
-                      x = 600;
-                      btnText1 = 'Available until $x';
+                      otpTimeout = 300;
+                      btnText1 = 'Available until $otpTimeout';
                       shouldAbsorb = true;
 
                     });
@@ -110,7 +113,7 @@ class _GenerateOTPState extends State<GenerateOTP> {
                     width: 350.0,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
-                      color: Colors.pink,
+                      color: Colors.blueGrey,
                     ),
                     child: Center(
                       child: Padding(

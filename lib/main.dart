@@ -9,6 +9,8 @@ import 'package:untitled/edit_lecture.dart';
 import 'package:untitled/list_lectures.dart';
 import 'package:untitled/student_dashboard.dart';
 import 'package:untitled/teacher_dashboard.dart';
+import 'package:untitled/view_course_student.dart';
+import 'package:untitled/view_course_teacher.dart';
 import 'create_course.dart';
 import 'firebase_options.dart';
 import 'login_admin.dart';
@@ -21,7 +23,7 @@ void main() async{
   final LocalStorage storage = LocalStorage('localstorage_app');
 
   print(storage.getItem('adminID'));
-  if (true) {
+  if (false) {
     if (storage.getItem('adminID') != null) {
       runApp(
         const MaterialApp(
@@ -56,7 +58,7 @@ void main() async{
         title: "Login Student ",
         // home: EditLecture(lectureID: "L8YJZSRn1aFzIRWH3lfb"),
         home: StudentDashboard(),
-        // home: EditCourse(courseID: "KcY485CKwkw3EdNzbM9r"),
+        // home: ViewCourseTeacher(courseID: "OvL4ljEXB3hJzgX3dPOh"),
       ),
     );
   }
@@ -80,7 +82,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.pink,
+        primarySwatch: Colors.blueGrey,
       ),
       home: const MyHomePage(title: 'Attendance System'),
     );
@@ -126,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.pinkAccent,
+        backgroundColor: Colors.blueGrey,
         body: Column(
           children: [
             Container(
@@ -172,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
-                              color: Colors.pink,
+                              color: Colors.blueGrey,
                             ),
                             child: const Center(
                               child: Padding(
@@ -200,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
-                              color: Colors.pink,
+                              color: Colors.blueGrey,
                             ),
                             child: const Center(
                               child: Padding(

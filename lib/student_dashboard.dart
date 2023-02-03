@@ -11,7 +11,7 @@ import 'package:untitled/edit_student.dart';
 import 'package:untitled/edit_teacher.dart';
 import 'package:untitled/list_lectures.dart';
 import 'package:untitled/list_student_courses.dart';
-import 'package:untitled/view_report.dart';
+import 'package:untitled/view_report_student.dart';
 import 'SecondScreen.dart';
 import 'login_teacher.dart';
 import 'nav_drawer.dart';
@@ -38,7 +38,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
             drawer: NavDrawer(),
             appBar: AppBar(
               title: const Text('Student Dashboard'),
-              backgroundColor: Colors.pink,
+              backgroundColor: Colors.blueGrey,
             ),
             body: Column(children: [
               SizedBox(
@@ -54,7 +54,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.pinkAccent,
+                        color: Colors.blueGrey,
                         boxShadow: const [
                           BoxShadow(color: Colors.white, spreadRadius: 5),
                         ],
@@ -75,7 +75,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                             FutureBuilder(
                                 future: db
                                     .collection("courses")
-                                    .where("students",
+                                    .where("student_ids",
                                         arrayContains:
                                             storage.getItem('studentID'))
                                     .count()
@@ -102,7 +102,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.pinkAccent,
+                        color: Colors.blueGrey,
                         boxShadow: const [
                           BoxShadow(color: Colors.white, spreadRadius: 5),
                         ],
@@ -147,7 +147,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.pinkAccent,
+                        color: Colors.blueGrey,
                         boxShadow: const [
                           BoxShadow(color: Colors.white, spreadRadius: 5),
                         ],
@@ -213,7 +213,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ViewReport()),
+                              builder: (context) => const ViewReportStudent()),
                         );
                       },
                     ),

@@ -49,6 +49,7 @@ class _CompleteFormState extends State<CompleteForm> {
   bool _nameHasError = true;
   bool _emailHasError = true;
   bool _passwordHasError = true;
+  bool _majorHasError = true;
 
 
   void _onChanged(dynamic val) => debugPrint(val.toString());
@@ -58,7 +59,7 @@ class _CompleteFormState extends State<CompleteForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create a new student'),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -81,7 +82,7 @@ class _CompleteFormState extends State<CompleteForm> {
                       name: 'id',
                       decoration: InputDecoration(
                         labelText: 'KKU ID',
-                        // labelStyle: const TextStyle(color: Colors.pink),
+                        // labelStyle: const TextStyle(color: Colors.blueGrey),
                         suffixIcon: _idHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -108,7 +109,7 @@ class _CompleteFormState extends State<CompleteForm> {
                       name: 'name',
                       decoration: InputDecoration(
                         labelText: 'Full Name',
-                        // labelStyle: const TextStyle(color: Colors.pink),
+                        // labelStyle: const TextStyle(color: Colors.blueGrey),
                         suffixIcon: _nameHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -130,10 +131,35 @@ class _CompleteFormState extends State<CompleteForm> {
                     ),
                     FormBuilderTextField(
                       autovalidateMode: AutovalidateMode.always,
+                      name: 'major',
+                      decoration: InputDecoration(
+                        labelText: 'Major',
+                        // labelStyle: const TextStyle(color: Colors.blueGrey),
+                        suffixIcon: _majorHasError
+                            ? const Icon(Icons.error, color: Colors.red)
+                            : const Icon(Icons.check, color: Colors.green),
+                      ),
+                      onChanged: (val) {
+                        setState(() {
+                          _majorHasError = !(_formKey.currentState?.fields['name']
+                              ?.validate() ??
+                              false);
+                        });
+                      },
+                      // valueTransformer: (text) => num.tryParse(text),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                      // initialValue: '0000000',
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                    ),
+                    FormBuilderTextField(
+                      autovalidateMode: AutovalidateMode.always,
                       name: 'email',
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        // labelStyle: const TextStyle(color: Colors.pink),
+                        // labelStyle: const TextStyle(color: Colors.blueGrey),
                         suffixIcon: _emailHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -165,7 +191,7 @@ class _CompleteFormState extends State<CompleteForm> {
                       name: 'password',
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        // labelStyle: const TextStyle(color: Colors.pink),
+                        // labelStyle: const TextStyle(color: Colors.blueGrey),
                         suffixIcon: _passwordHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
@@ -213,7 +239,7 @@ class _CompleteFormState extends State<CompleteForm> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink, // background
+                        backgroundColor: Colors.blueGrey, // background
                         padding: const EdgeInsets.all(20.0),
                       ),
                       child: const Text(

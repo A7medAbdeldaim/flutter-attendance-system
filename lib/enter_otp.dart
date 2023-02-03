@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
@@ -60,7 +61,7 @@ class _EnterOTPState extends State<EnterOTP> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text("Enter OTP"),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.white,
       body: Center(
@@ -99,7 +100,7 @@ class _EnterOTPState extends State<EnterOTP> {
                     controller: textEditingController,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    boxShadows: [
+                    boxShadows: const [
                       BoxShadow(
                         offset: Offset(0, 1),
                         color: Colors.black12,
@@ -107,22 +108,54 @@ class _EnterOTPState extends State<EnterOTP> {
                       )
                     ],
                   onChanged: (value) async {
-                    if (value == snapshot.get('otp')) {
+
+                    if (value == snapshot.get('otp') && DateTime.now().millisecondsSinceEpoch <= snapshot.get('otp_expire')) {
+                      var course_data;
+                      await db.collection("courses").doc(
+                          snapshot.get('course_id')).get().then(
+                            (DocumentSnapshot doc) {
+                          course_data = doc.data() as Map<String, dynamic>;
+                        },
+                        onError: (e) => print("Error getting document: $e"),
+                      );
+                      course_data = jsonDecode(jsonEncode(course_data));
+
+                      var student_data;
+                      await db.collection("students").doc(
+                          storage.getItem('studentID')).get().then(
+                            (DocumentSnapshot doc) {
+                          student_data = doc.data() as Map<String, dynamic>;
+                        },
+                        onError: (e) => print("Error getting document: $e"),
+                      );
+
+                      student_data = jsonDecode(jsonEncode(student_data));
+                      print(DateTime.fromMillisecondsSinceEpoch(snapshot.get('start_date').microsecondsSinceEpoch));
                       var data = {
                         "lecture_id": snapshot.id,
+                        "lecture_name": snapshot.get('name'),
                         "student_id": storage.getItem('studentID'),
-                        "course_id": snapshot.get('course_id'),
+                        "student_name": student_data['name'],
+                        "course_name": course_data['name'],
+                        "teacher_id": course_data['teacher_ids']?[0],
                         "check_in": DateTime.now(),
-                        "is_late": DateTime.now().difference(snapshot.get('start_date').toDate()).isNegative,
+                        "is_late": DateTime.fromMillisecondsSinceEpoch(snapshot.get('start_date').microsecondsSinceEpoch).add(const Duration(minutes: 10)).millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch ? true : false
                       };
 
                       await db.collection("students_attendance")
                           .doc('${snapshot.id}-${storage.getItem('studentID')}')
                           .set(data, SetOptions(merge: true));
 
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SecondScreen(snapshot: '${snapshot.id}-${storage.getItem('studentID')}')));
-
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) =>
+                              SecondScreen(
+                                  snapshot: '${snapshot.id}-${storage.getItem(
+                                      'studentID')}')));
+                    } else if (value == snapshot.get('otp') && DateTime.now().millisecondsSinceEpoch > snapshot.get('otp_expire')) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(
+                        content: Text("OTP is Expired"),
+                      ));
                     } else if (value != snapshot.get('otp') && value.length == 6) {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(const SnackBar(
@@ -140,7 +173,7 @@ class _EnterOTPState extends State<EnterOTP> {
                   width: 350.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    color: Colors.pink,
+                    color: Colors.blueGrey,
                   ),
                   child: Center(
                     child: Padding(

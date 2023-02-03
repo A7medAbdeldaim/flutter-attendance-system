@@ -22,20 +22,20 @@ class _ListTeacherCoursesState extends State<ListTeacherCourses> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text("Courses"),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.white,
       body:
       StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("courses")
-              .where("teachers", arrayContains: storage.getItem('teacherID'))
+              .where("teacher_ids", arrayContains: storage.getItem('teacherID'))
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Transform.scale(
                 scale: 0.25,
-                child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),),
+                child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey),),
               );
             }
             final userSnapshot = snapshot.data?.docs;
@@ -47,7 +47,7 @@ class _ListTeacherCoursesState extends State<ListTeacherCourses> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: Colors.pink,
+                      backgroundColor: Colors.blueGrey,
                       child: Text(userSnapshot[index]["name"][0]),
                     ),
                     title: Text(userSnapshot[index]["name"]),

@@ -53,7 +53,7 @@ class _AdminDashboardState extends State<AdminDashboard>
             drawer: NavDrawer(),
             appBar: AppBar(
               title: const Text('Admin Dashboard'),
-              backgroundColor: Colors.pink,
+              backgroundColor: Colors.blueGrey,
               bottom: TabBar(
                 controller: _tabController,
                 tabs: const <Widget>[
@@ -80,7 +80,7 @@ class _AdminDashboardState extends State<AdminDashboard>
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Transform.scale(
                           scale: 0.25,
-                          child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),),
+                          child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey),),
                         );
                       }
                       final userSnapshot = snapshot.data?.docs;
@@ -125,17 +125,11 @@ class _AdminDashboardState extends State<AdminDashboard>
                               // component is not dragged.
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: Colors.pink,
+                                  backgroundColor: Colors.blueGrey,
                                   child: Text(userSnapshot[index]["name"][0]),
                                 ),
                                 title: Text(userSnapshot[index]["name"]),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ListLectures(courseID:userSnapshot[index].id)),
-                                  );
-                                }, //
+                                onTap: () {}, //
                               ),
                             );
                           });
@@ -148,7 +142,7 @@ class _AdminDashboardState extends State<AdminDashboard>
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Transform.scale(
                           scale: 0.25,
-                          child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),),
+                          child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey),),
                         );
                       }
                       final userSnapshot = snapshot.data?.docs;
@@ -193,17 +187,11 @@ class _AdminDashboardState extends State<AdminDashboard>
                               // component is not dragged.
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: Colors.pink,
+                                  backgroundColor: Colors.blueGrey,
                                   child: Text(userSnapshot[index]["name"][0]),
                                 ),
                                 title: Text(userSnapshot[index]["name"]),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ListLectures(courseID:userSnapshot[index].id)),
-                                  );
-                                }, //
+                                onTap: () {}, //
                               ),
                             );
                           });
@@ -216,7 +204,7 @@ class _AdminDashboardState extends State<AdminDashboard>
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Transform.scale(
                           scale: 0.25,
-                          child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),),
+                          child: const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey),),
                         );
                       }
                       final userSnapshot = snapshot.data?.docs;
@@ -261,7 +249,7 @@ class _AdminDashboardState extends State<AdminDashboard>
                               // component is not dragged.
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: Colors.pink,
+                                  backgroundColor: Colors.blueGrey,
                                   child: Text(userSnapshot[index]["name"][0]),
                                 ),
                                 title: Text(userSnapshot[index]["name"]),
@@ -296,7 +284,7 @@ class _AdminDashboardState extends State<AdminDashboard>
         },
         tooltip: 'Add a new Teacher',
         label: const Text('Add a new Teacher'),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
         icon: const Icon(Icons.add),
       );
     } else if (ind == 1) {
@@ -307,7 +295,7 @@ class _AdminDashboardState extends State<AdminDashboard>
         },
         tooltip: 'Add a new Student',
         label: const Text('Add a new Student'),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
         icon: const Icon(Icons.add),
       );
     } else if (ind == 2) {
@@ -318,7 +306,7 @@ class _AdminDashboardState extends State<AdminDashboard>
         },
         label: const Text('Add a new Course'),
         tooltip: 'Add a new Course',
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
         icon: const Icon(Icons.add),
       );
     }

@@ -32,7 +32,7 @@ class _ListLecturesState extends State<ListLectures> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: const Text("Lectures"),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
       ),
       backgroundColor: Colors.white,
       body: StreamBuilder<QuerySnapshot>(
@@ -45,7 +45,7 @@ class _ListLecturesState extends State<ListLectures> {
               return Transform.scale(
                 scale: 0.25,
                 child: const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey),
                 ),
               );
             }
@@ -92,7 +92,7 @@ class _ListLecturesState extends State<ListLectures> {
                     child: ListTile(
                       title: Text(userSnapshot[index]["name"]),
                       leading: CircleAvatar(
-                        backgroundColor: Colors.pink,
+                        backgroundColor: Colors.blueGrey,
                         child: Text(userSnapshot[index]["name"][0]),
                       ),
                     ),
@@ -108,7 +108,7 @@ class _ListLecturesState extends State<ListLectures> {
         },
         tooltip: 'Add a new Lecture',
         label: const Text('Add a new Lecture'),
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.blueGrey,
         icon: const Icon(Icons.add),
       ),
     );
