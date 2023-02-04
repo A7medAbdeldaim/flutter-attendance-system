@@ -23,7 +23,7 @@ void main() async{
   final LocalStorage storage = LocalStorage('localstorage_app');
 
   print(storage.getItem('adminID'));
-  if (false) {
+  if (true) {
     if (storage.getItem('adminID') != null) {
       runApp(
         const MaterialApp(

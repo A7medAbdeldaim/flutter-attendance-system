@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:untitled/generate_otp.dart';
 import 'package:untitled/list_teacher_lectures.dart';
+import 'package:untitled/view_course_teacher.dart';
 import 'enter_otp.dart';
 
 class ListTeacherCourses extends StatefulWidget {
@@ -55,7 +56,7 @@ class _ListTeacherCoursesState extends State<ListTeacherCourses> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ListTeacherLectures(courseID:userSnapshot[index].id)),
+                            builder: (context) => ViewCourseTeacher(courseID:userSnapshot[index].id)),
                       );
                     }, //
                   );

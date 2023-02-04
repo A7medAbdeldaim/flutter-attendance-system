@@ -49,7 +49,7 @@ class _SecondScreenState extends State<SecondScreen> {
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      snapshot.data?.get('is_late') ? 'You are late' : 'You are on time',
+                      snapshot.data?.get('is_late'),
                       style: const TextStyle(fontSize: 38, color: Colors.blueGrey),
                       textAlign: TextAlign.center,
                     ),
