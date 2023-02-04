@@ -39,7 +39,7 @@ class _GenerateOTPState extends State<GenerateOTP> {
         setState(() {
           if (shouldAbsorb == true) {
             otpTimeout--;
-            btnText1 = 'Available until $otpTimeout';
+            btnText1 = 'Available until ${getTimeLeft(otpTimeout)}';
             if (otpTimeout < 0) {
               otp = '';
               btnText1 = 'Generate';
@@ -101,10 +101,14 @@ class _GenerateOTPState extends State<GenerateOTP> {
                           'otp': otp,
                           'otp_expire': DateTime.now().add(const Duration(seconds: 300)).millisecondsSinceEpoch,
                         }, SetOptions(merge: true));
+
+                    // Get course ID
+                    // Get student IDS
+                    // For all students insert data
                     setState(() {
                       otp;
                       otpTimeout = 300;
-                      btnText1 = 'Available until $otpTimeout';
+                      btnText1 = 'Available until ${getTimeLeft(otpTimeout)}';
                       shouldAbsorb = true;
 
                     });
@@ -136,5 +140,13 @@ class _GenerateOTPState extends State<GenerateOTP> {
         ),
       ),
     );
+  }
+
+  String getTimeLeft(int timeLeft) {
+    return '${getNumberFormat(timeLeft ~/ 60)}:${getNumberFormat(timeLeft%60)}';
+  }
+
+  String getNumberFormat(int num) {
+    return num < 10 ? '0$num' : num.toString();
   }
 }

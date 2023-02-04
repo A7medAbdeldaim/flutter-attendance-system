@@ -119,6 +119,7 @@ class _EnterOTPState extends State<EnterOTP> {
                         onError: (e) => print("Error getting document: $e"),
                       );
                       course_data = jsonDecode(jsonEncode(course_data));
+                      print(DateTime.fromMillisecondsSinceEpoch(snapshot.get('start_date').millisecondsSinceEpoch));
 
                       var student_data;
                       await db.collection("students").doc(
@@ -130,7 +131,6 @@ class _EnterOTPState extends State<EnterOTP> {
                       );
 
                       student_data = jsonDecode(jsonEncode(student_data));
-                      print(DateTime.fromMillisecondsSinceEpoch(snapshot.get('start_date').microsecondsSinceEpoch));
                       var data = {
                         "lecture_id": snapshot.id,
                         "lecture_name": snapshot.get('name'),
@@ -139,7 +139,8 @@ class _EnterOTPState extends State<EnterOTP> {
                         "course_name": course_data['name'],
                         "teacher_id": course_data['teacher_ids']?[0],
                         "check_in": DateTime.now(),
-                        "is_late": DateTime.fromMillisecondsSinceEpoch(snapshot.get('start_date').microsecondsSinceEpoch).add(const Duration(minutes: 10)).millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch ? true : false
+                        "is_late": DateTime.fromMillisecondsSinceEpoch(snapshot.get('start_date').millisecondsSinceEpoch).add(const Duration(minutes: 10)).millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch ?
+                        'You are late more than 10 minutes' : 'You are on time'
                       };
 
                       await db.collection("students_attendance")

@@ -47,7 +47,10 @@ dependencies:
   flutter_slidable: ^2.0.0
   pin_code_fields: ^7.4.0
   flutter_pin_code_fields: ^1.2.0
-  pdf: ^3.9.0
+  horizontal_data_table: ^4.1.4
+  syncfusion_flutter_pdf: ^18.4.47-beta
+  path_provider: ^2.0.1
+  open_file: ^3.1.0
 
 dev_dependencies:
   flutter_test:

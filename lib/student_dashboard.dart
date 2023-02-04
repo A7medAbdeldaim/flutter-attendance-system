@@ -213,7 +213,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ViewReportStudent()),
+                              builder: (context) => ViewReportStudent()),
                         );
                       },
                     ),

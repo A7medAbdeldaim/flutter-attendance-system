@@ -11,12 +11,14 @@ import 'package:untitled/edit_teacher.dart';
 import 'package:untitled/edit_teacher.dart';
 import 'package:untitled/list_lectures.dart';
 import 'package:untitled/list_teacher_courses.dart';
+import 'package:untitled/mobile.dart';
 import 'package:untitled/view_report_student.dart';
 import 'package:untitled/view_report_teacher.dart';
 import 'SecondScreen.dart';
 import 'list_teacher_courses.dart';
 import 'login_teacher.dart';
 import 'nav_drawer.dart';
+
 
 class TeacherDashboard extends StatefulWidget {
   const TeacherDashboard({super.key});
@@ -127,7 +129,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                               builder: (context) => const ViewReportTeacher()),
                         );
                       },
-                    ),
+                    )
                   ]).toList(),
                 ),
               ),

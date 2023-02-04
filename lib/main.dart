@@ -57,7 +57,7 @@ void main() async{
         debugShowCheckedModeBanner: false,
         title: "Login Student ",
         // home: EditLecture(lectureID: "L8YJZSRn1aFzIRWH3lfb"),
-        home: StudentDashboard(),
+        home: TeacherDashboard(),
         // home: ViewCourseTeacher(courseID: "OvL4ljEXB3hJzgX3dPOh"),
       ),
     );
