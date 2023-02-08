@@ -42,6 +42,7 @@ class _ViewReportStudent extends State<ViewReportStudent> {
             loaded = true;
             data = snapshot.data!.docs;
             user.initData();
+            print(user.userInfo.length);
           }
           return Scaffold(
             appBar: AppBar(
@@ -177,6 +178,7 @@ class User {
   List userInfo = [];
 
   void initData() {
+    userInfo = [];
     for (int i = 0; i < data.length; i++) {
       userInfo.add(AttendanceInfo(
           data[i]['course_name'],
