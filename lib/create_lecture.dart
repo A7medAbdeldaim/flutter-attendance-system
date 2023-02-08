@@ -66,6 +66,7 @@ class _CompleteFormState extends State<CompleteForm> {
   bool _nameHasError = true;
   bool _startDateHasError = true;
   bool _endDateHasError = true;
+  String end_date_temp = '';
 
   void _onChanged(dynamic val) => debugPrint(val.toString());
 
@@ -95,6 +96,7 @@ class _CompleteFormState extends State<CompleteForm> {
                     FormBuilderTextField(
                       autovalidateMode: AutovalidateMode.always,
                       name: 'name',
+                      initialValue: end_date_temp,
                       decoration: InputDecoration(
                         labelText: 'Lecture Name',
                         // labelStyle: const TextStyle(color: Colors.blueGrey),
@@ -119,6 +121,19 @@ class _CompleteFormState extends State<CompleteForm> {
                       textInputAction: TextInputAction.next,
                     ),
                     const SizedBox(height: 25),
+                    FormBuilderRadioGroup(
+                      name: 'duration',
+                      initialValue: "Theoretical (1 Hour)",
+                      decoration: const InputDecoration(
+                          labelText: 'Duration',
+                          labelStyle: TextStyle(
+                              fontWeight: FontWeight.normal)),
+                      options: const [
+                        FormBuilderFieldOption(value: "Theoretical (1 Hour)"),
+                        FormBuilderFieldOption(value: "Practical (2 Hours)"),
+                      ],
+                    ),
+                    const SizedBox(height: 25),
                     FormBuilderDateTimePicker(
                       name: 'start_date',
                       enabled: true,
@@ -136,6 +151,19 @@ class _CompleteFormState extends State<CompleteForm> {
                               .currentState?.fields['start_date']
                               ?.validate() ??
                               false);
+                              String list_val = _formKey.currentState!.fields['duration']?.value;
+
+                              DateTime? end_date;
+                              if (list_val == 'Practical (2 Hours)') {
+                                end_date = val?.add(
+                                    Duration(hours: 2));
+                              } else {
+                                end_date = val?.add(
+                                    Duration(hours: 1));
+                              }
+                              _formKey.currentState?.patchValue({
+                                'end_date': end_date,
+                              });
                         });
                       },
                       style: const TextStyle(
@@ -147,7 +175,7 @@ class _CompleteFormState extends State<CompleteForm> {
                     const SizedBox(height: 25),
                     FormBuilderDateTimePicker(
                       name: 'end_date',
-                      enabled: true,
+                      enabled: false,
                       decoration: InputDecoration(
                           labelText: 'End Date',
                           suffixIcon: _endDateHasError
@@ -169,19 +197,6 @@ class _CompleteFormState extends State<CompleteForm> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
                       ]),
-                    ),
-                    const SizedBox(height: 25),
-                    FormBuilderRadioGroup(
-                      name: 'duration',
-                      initialValue: "Theoretical (1 Hour)",
-                      decoration: const InputDecoration(
-                          labelText: 'Duration',
-                          labelStyle: TextStyle(
-                              fontWeight: FontWeight.normal)),
-                      options: const [
-                        FormBuilderFieldOption(value: "Theoretical (1 Hour)"),
-                        FormBuilderFieldOption(value: "Practical (2 Hours)"),
-                      ],
                     ),
                   ],
                 ),
