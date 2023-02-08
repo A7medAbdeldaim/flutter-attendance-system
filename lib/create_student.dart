@@ -124,6 +124,9 @@ class _CompleteFormState extends State<CompleteForm> {
                       // valueTransformer: (text) => num.tryParse(text),
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
+                            (input) => RegExp(
+                            r'^[a-zA-Z ]+$')
+                            .hasMatch(input!) ? null : "Letters only",
                       ]),
                       // initialValue: '0000000',
                       keyboardType: TextInputType.text,

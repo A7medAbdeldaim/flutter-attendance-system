@@ -24,7 +24,7 @@ void insertData(unmodifiedData, courseID) {
   var data = {
     "name": unmodifiedData['name'],
     "start_date": unmodifiedData['start_date'],
-    "end_date": unmodifiedData['end_date'],
+    "end_date": DateFormat('dd/MM/yyyy HH:mm:ss').parse(unmodifiedData['end_date']),
     "course_id": courseID,
     "duration": unmodifiedData['duration'],
   };
@@ -66,7 +66,6 @@ class _CompleteFormState extends State<CompleteForm> {
   bool _nameHasError = true;
   bool _startDateHasError = true;
   bool _endDateHasError = true;
-  String end_date_temp = '';
 
   void _onChanged(dynamic val) => debugPrint(val.toString());
 
@@ -96,7 +95,6 @@ class _CompleteFormState extends State<CompleteForm> {
                     FormBuilderTextField(
                       autovalidateMode: AutovalidateMode.always,
                       name: 'name',
-                      initialValue: end_date_temp,
                       decoration: InputDecoration(
                         labelText: 'Lecture Name',
                         // labelStyle: const TextStyle(color: Colors.blueGrey),
@@ -124,6 +122,22 @@ class _CompleteFormState extends State<CompleteForm> {
                     FormBuilderRadioGroup(
                       name: 'duration',
                       initialValue: "Theoretical (1 Hour)",
+                      onChanged: (val) {
+                        setState(() {
+                          DateTime start_date = _formKey.currentState!.fields['start_date']?.value;
+                          DateTime? end_date;
+                          if (val == 'Practical (2 Hours)') {
+                            end_date = start_date.add(
+                                Duration(hours: 2));
+                          } else {
+                            end_date = start_date.add(
+                                Duration(hours: 1));
+                          }
+                          _formKey.currentState?.patchValue({
+                            'end_date': DateFormat('dd/MM/yyyy HH:mm:ss').format(end_date).toString(),
+                          });
+                        });
+                      },
                       decoration: const InputDecoration(
                           labelText: 'Duration',
                           labelStyle: TextStyle(
@@ -161,8 +175,8 @@ class _CompleteFormState extends State<CompleteForm> {
                                 end_date = val?.add(
                                     Duration(hours: 1));
                               }
-                              _formKey.currentState?.patchValue({
-                                'end_date': end_date,
+                               _formKey.currentState?.patchValue({
+                                'end_date': DateFormat('dd/MM/yyyy HH:mm:ss').format(end_date!).toString(),
                               });
                         });
                       },
@@ -173,17 +187,16 @@ class _CompleteFormState extends State<CompleteForm> {
                       ]),
                     ),
                     const SizedBox(height: 25),
-                    FormBuilderDateTimePicker(
+                    FormBuilderTextField(
+                      autovalidateMode: AutovalidateMode.always,
                       name: 'end_date',
-                      enabled: false,
+                      readOnly: true,
                       decoration: InputDecoration(
-                          labelText: 'End Date',
-                          suffixIcon: _endDateHasError
-                              ? const Icon(Icons.error, color: Colors.red)
-                              : const Icon(Icons.check, color: Colors.green),
-                          labelStyle: const TextStyle(
-                              fontWeight: FontWeight.normal)),
-
+                        labelText: 'End Date',
+                        suffixIcon: _endDateHasError
+                            ? const Icon(Icons.error, color: Colors.red)
+                            : const Icon(Icons.check, color: Colors.green),
+                      ),
                       onChanged: (val) {
                         setState(() {
                           _endDateHasError = !(_formKey
@@ -192,11 +205,13 @@ class _CompleteFormState extends State<CompleteForm> {
                               false);
                         });
                       },
-                      style: const TextStyle(
-                          fontWeight: FontWeight.normal),
+                      // valueTransformer: (text) => num.tryParse(text),
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(),
                       ]),
+                      // initialValue: '0000000',
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
                     ),
                   ],
                 ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +16,17 @@ String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
 
 class GenerateOTP extends StatefulWidget {
   GenerateOTP({super.key, required this.snapshot});
+
   final snapshot;
 
   @override
-  State<GenerateOTP> createState() => _GenerateOTPState(snapshot: this.snapshot);
+  State<GenerateOTP> createState() =>
+      _GenerateOTPState(snapshot: this.snapshot);
 }
 
 class _GenerateOTPState extends State<GenerateOTP> {
   _GenerateOTPState({required this.snapshot});
+
   final snapshot;
   final LocalStorage storage = LocalStorage('localstorage_app');
   final db = FirebaseFirestore.instance;
@@ -34,20 +38,19 @@ class _GenerateOTPState extends State<GenerateOTP> {
 
   @override
   void initState() {
-
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-        setState(() {
-          if (shouldAbsorb == true) {
-            otpTimeout--;
-            btnText1 = 'Available until ${getTimeLeft(otpTimeout)}';
-            if (otpTimeout < 0) {
-              otp = '';
-              btnText1 = 'Generate';
-              shouldAbsorb = false;
-            }
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (shouldAbsorb == true) {
+          otpTimeout--;
+          btnText1 = 'Available until ${getTimeLeft(otpTimeout)}';
+          if (otpTimeout < 0) {
+            otp = '';
+            btnText1 = 'Generate';
+            shouldAbsorb = false;
           }
-        });
+        }
       });
+    });
 
     super.initState();
   }
@@ -95,22 +98,73 @@ class _GenerateOTPState extends State<GenerateOTP> {
                 child: GestureDetector(
                   onTap: () async {
                     otp = getRandomString(6);
-                    await db.collection("lectures")
-                        .doc(snapshot)
-                        .set({
-                          'otp': otp,
-                          'otp_expire': DateTime.now().add(const Duration(seconds: 300)).millisecondsSinceEpoch,
-                        }, SetOptions(merge: true));
+                    await db.collection("lectures").doc(snapshot).set({
+                      'otp': otp,
+                      'otp_expire': DateTime.now()
+                          .add(const Duration(seconds: 300))
+                          .millisecondsSinceEpoch,
+                    }, SetOptions(merge: true));
 
-                    // Get course ID
-                    // Get student IDS
-                    // For all students insert data
+                    var lecture_data;
+                    await db.collection("lectures").doc(snapshot).get().then(
+                      (DocumentSnapshot doc) {
+                        lecture_data = doc.data() as Map<String, dynamic>;
+                      },
+                      onError: (e) => print("Error getting document: $e"),
+                    );
+
+                    var course_data;
+                    await db
+                        .collection("courses")
+                        .doc(lecture_data['course_id'])
+                        .get()
+                        .then(
+                      (DocumentSnapshot doc) {
+                        course_data = doc.data() as Map<String, dynamic>;
+                      },
+                      onError: (e) => print("Error getting document: $e"),
+                    );
+                    course_data = jsonDecode(jsonEncode(course_data));
+                    print(course_data['student_ids']);
+                    await db
+                        .collection("students")
+                        .where(FieldPath.documentId,
+                            whereIn: course_data['student_ids'])
+                        .get()
+                        .then(
+                      (doc) async {
+                        print(doc.docs.length);
+                        for (var element in doc.docs) {
+                          var data = {
+                            "lecture_id": snapshot,
+                            "lecture_name": lecture_data['name'],
+                            "student_id": element.id,
+                            "student_name": element['name'],
+                            "course_name": course_data['name'],
+                            "teacher_id": course_data['teacher_ids']?[0],
+                            "is_late": 'Absent'
+                          };
+
+                          await db
+                              .collection('students_attendance')
+                              .doc('$snapshot-${element.id}')
+                              .get().then((value) => {
+                                if (!value.exists) {
+                                  db.collection("students_attendance")
+                                      .doc('$snapshot-${element.id}')
+                                      .set(data, SetOptions(merge: true))
+                                }
+                              });
+                        }
+                      },
+                      onError: (e) => print("Error getting document: $e"),
+                    );
+
                     setState(() {
                       otp;
                       otpTimeout = 300;
                       btnText1 = 'Available until ${getTimeLeft(otpTimeout)}';
                       shouldAbsorb = true;
-
                     });
                   },
                   child: Container(
@@ -143,7 +197,7 @@ class _GenerateOTPState extends State<GenerateOTP> {
   }
 
   String getTimeLeft(int timeLeft) {
-    return '${getNumberFormat(timeLeft ~/ 60)}:${getNumberFormat(timeLeft%60)}';
+    return '${getNumberFormat(timeLeft ~/ 60)}:${getNumberFormat(timeLeft % 60)}';
   }
 
   String getNumberFormat(int num) {

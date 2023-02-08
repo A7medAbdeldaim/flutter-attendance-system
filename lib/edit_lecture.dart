@@ -24,7 +24,8 @@ void editData(unmodifiedData, lectureID) {
   var data = {
     "name": unmodifiedData['name'],
     "start_date": unmodifiedData['start_date'],
-    "end_date": unmodifiedData['end_date'],
+    "end_date": DateFormat('dd/MM/yyyy HH:mm:ss').parse(unmodifiedData['end_date']),
+    "duration": unmodifiedData['duration'],
   };
 
   db.collection("lectures").doc(lectureID).set(data, SetOptions(merge: true));
@@ -63,6 +64,7 @@ class _CompleteFormState extends State<CompleteForm> {
   bool _startDateHasError = false;
   bool _endDateHasError = false;
   final db = FirebaseFirestore.instance;
+  String end_date_temp = '';
 
   void _onChanged(dynamic val) => debugPrint(val.toString());
 
@@ -78,6 +80,7 @@ class _CompleteFormState extends State<CompleteForm> {
           } else {
             loaded = true;
           }
+          end_date_temp = DateFormat('dd/MM/yyyy HH:mm:ss').format(snapshot.data?['end_date']!.toDate()).toString();
 
           return Scaffold(
             appBar: AppBar(
@@ -129,16 +132,44 @@ class _CompleteFormState extends State<CompleteForm> {
                             textInputAction: TextInputAction.next,
                           ),
                           const SizedBox(height: 25),
+                          FormBuilderRadioGroup(
+                            name: 'duration',
+                            initialValue: snapshot.data?['duration'],
+                            onChanged: (val) {
+                              setState(() {
+                                DateTime start_date = _formKey.currentState!.fields['start_date']?.value;
+                                DateTime? end_date;
+                                if (val == 'Practical (2 Hours)') {
+                                  end_date = start_date.add(
+                                      Duration(hours: 2));
+                                } else {
+                                  end_date = start_date.add(
+                                      Duration(hours: 1));
+                                }
+                                _formKey.currentState?.patchValue({
+                                  'end_date': DateFormat('dd/MM/yyyy HH:mm:ss').format(end_date).toString(),
+                                });
+                              });
+                            },
+                            decoration: const InputDecoration(
+                                labelText: 'Duration',
+                                labelStyle: TextStyle(
+                                    fontWeight: FontWeight.normal)),
+                            options: const [
+                              FormBuilderFieldOption(value: "Theoretical (1 Hour)"),
+                              FormBuilderFieldOption(value: "Practical (2 Hours)"),
+                            ],
+                          ),
+                          const SizedBox(height: 25),
                           FormBuilderDateTimePicker(
                             name: 'start_date',
                             enabled: true,
-                            initialValue: snapshot.hasData ? snapshot.data?.get('start_date').toDate() : null,
+                            initialValue: snapshot.data?['start_date'].toDate(),
                             decoration: InputDecoration(
                                 labelText: 'Start Date',
                                 suffixIcon: _startDateHasError
                                     ? const Icon(Icons.error, color: Colors.red)
-                                    : const Icon(
-                                    Icons.check, color: Colors.green),
+                                    : const Icon(Icons.check, color: Colors.green),
                                 labelStyle: const TextStyle(
                                     fontWeight: FontWeight.normal)),
 
@@ -148,6 +179,19 @@ class _CompleteFormState extends State<CompleteForm> {
                                     .currentState?.fields['start_date']
                                     ?.validate() ??
                                     false);
+                                String list_val = _formKey.currentState!.fields['duration']?.value;
+
+                                DateTime? end_date;
+                                if (list_val == 'Practical (2 Hours)') {
+                                  end_date = val?.add(
+                                      Duration(hours: 2));
+                                } else {
+                                  end_date = val?.add(
+                                      Duration(hours: 1));
+                                }
+                                _formKey.currentState?.patchValue({
+                                  'end_date': DateFormat('dd/MM/yyyy HH:mm:ss').format(end_date!).toString(),
+                                });
                               });
                             },
                             style: const TextStyle(
@@ -157,19 +201,17 @@ class _CompleteFormState extends State<CompleteForm> {
                             ]),
                           ),
                           const SizedBox(height: 25),
-                          FormBuilderDateTimePicker(
+                          FormBuilderTextField(
+                            autovalidateMode: AutovalidateMode.always,
                             name: 'end_date',
-                            enabled: true,
-                            initialValue: snapshot.hasData ? snapshot.data?.get('end_date').toDate() : null,
+                            readOnly: true,
+                            initialValue: DateFormat('dd/MM/yyyy HH:mm:ss').format(snapshot.data?['end_date'].toDate()!).toString(),
                             decoration: InputDecoration(
-                                labelText: 'End Date',
-                                suffixIcon: _endDateHasError
-                                    ? const Icon(Icons.error, color: Colors.red)
-                                    : const Icon(
-                                    Icons.check, color: Colors.green),
-                                labelStyle: const TextStyle(
-                                    fontWeight: FontWeight.normal)),
-
+                              labelText: 'End Date',
+                              suffixIcon: _endDateHasError
+                                  ? const Icon(Icons.error, color: Colors.red)
+                                  : const Icon(Icons.check, color: Colors.green),
+                            ),
                             onChanged: (val) {
                               setState(() {
                                 _endDateHasError = !(_formKey
@@ -178,11 +220,13 @@ class _CompleteFormState extends State<CompleteForm> {
                                     false);
                               });
                             },
-                            style: const TextStyle(
-                                fontWeight: FontWeight.normal),
+                            // valueTransformer: (text) => num.tryParse(text),
                             validator: FormBuilderValidators.compose([
                               FormBuilderValidators.required(),
                             ]),
+                            // initialValue: '0000000',
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.next,
                           ),
                           const SizedBox(height: 25),
                         ],

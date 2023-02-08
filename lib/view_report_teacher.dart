@@ -272,12 +272,13 @@ class User {
 
   void initData() {
     for (int i = 0; i < data.length; i++) {
+
       userInfo.add(AttendanceInfo(
           data[i]['course_name'],
           data[i]['lecture_name'],
           data[i]['student_name'],
-          data[i]['check_in'].toDate().toString(),
-          data[i]['check_out'].toDate().toString(),
+          data[i].data().containsKey('check_in') ? data[i].get('check_in').toDate().toString() : '--',
+          data[i].data().containsKey('check_out') ? data[i].get('check_out').toDate().toString() : '--',
           data[i]['is_late'].toString()));
     }
   }

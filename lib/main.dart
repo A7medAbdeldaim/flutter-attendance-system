@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:untitled/admin_dashboard.dart';
 import 'package:untitled/create_lecture.dart';
+import 'package:untitled/create_student.dart';
 import 'package:untitled/create_teacher.dart';
 import 'package:untitled/edit_course.dart';
 import 'package:untitled/edit_lecture.dart';
+import 'package:untitled/generate_otp.dart';
 import 'package:untitled/list_lectures.dart';
 import 'package:untitled/student_dashboard.dart';
 import 'package:untitled/teacher_dashboard.dart';
@@ -53,11 +55,11 @@ void main() async{
     runApp(const MyApp());
   } else {
     runApp(
-      const MaterialApp(
+      MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "Login Student ",
         // home: EditLecture(lectureID: "L8YJZSRn1aFzIRWH3lfb"),
-        home: TeacherDashboard(),
+        home: StudentDashboard(),
         // home: ViewCourseTeacher(courseID: "OvL4ljEXB3hJzgX3dPOh"),
       ),
     );
